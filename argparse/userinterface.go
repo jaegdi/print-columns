@@ -172,6 +172,7 @@ func cmdUsage() {
 	flag.PrintDefaults()
 }
 
+// getArgsColNumbers collect all unknown parameters, if there are int values, as column numbers.
 func getArgsColNumbers() T_ColNumbers {
 	var cn T_ColNumbers
 	for _, val := range flag.Args() {
@@ -183,6 +184,7 @@ func getArgsColNumbers() T_ColNumbers {
 	return cn
 }
 
+// fix_params disable CmdParams, that make no sense,when output to CSV or JSON.
 func fix_params() {
 	if CmdParams.Csv || CmdParams.Json {
 		CmdParams.Ts = false
@@ -192,12 +194,13 @@ func fix_params() {
 	CmdParams.Grouping = CmdParams.Gcol > 0
 }
 
-// EvalFlags evaluate all command line flags and set a struct with their values
+// EvalFlags evaluate all command line flags and set a struct with their values.
 func EvalFlags() {
 	flag.Usage = cmdParams
 	// Global Flags
 	filenmPtr := flag.String("file", "", "Filename,        read the text from this file")
 	headerPtr := flag.String("header", "", "Headerline,      if the text has no headers, you can define headers. They must be defined in the original order of the incoming text. Headers are left adjeusted, if they not start with a dash (-), then they right adjusted.")
+	sepPtr := flag.String("sep", " ", "InputColumnSeperator, define the character to separate the columns, when parsing in, default=' '")
 	colsepPtr := flag.String("colsep", " ", "ColumnSeperator, define the character to separate the columns, default='|'")
 	filterPtr := flag.String("filter", "", "Filterpattern,   process only lines where 'filter-string' is found")
 	gcolnrPtr := flag.Int("gcol", 0, "GroupColumn,     write a separator when the value in this column is different to the value in the previous line to group the values in this column")
@@ -220,6 +223,7 @@ func EvalFlags() {
 	flags := T_flags{
 		Filename:   string(*filenmPtr),
 		Header:     string(*headerPtr),
+		Sep:        string(*sepPtr),
 		Colsep:     string(*colsepPtr),
 		Filter:     string(*filterPtr),
 		Gcol:       T_ColNum(*gcolnrPtr),

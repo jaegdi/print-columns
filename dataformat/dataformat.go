@@ -89,6 +89,9 @@ func (data *T_parsedData) InsertGroupSeperator(gcol int, trenner []string) {
 					row[gcol] = ""
 				}
 				nd.Append(row)
+				if ref == trenner[gcol] {
+					ref = row[gcol]
+				}
 			}
 		}
 		*data = nd
@@ -155,12 +158,16 @@ func (data *T_parsedData) formatDataToMaxWidth(maxlen []int) {
 
 // printAsciiTab prints the data as ASCII table
 func (data *T_parsedData) printAsciiTab() {
+
 	for _, row := range *data {
 		var line string
 		if ap.CmdParams.Pp || ap.CmdParams.Cs {
 			line = "| " + strings.Join(row, " | ") + " |"
 		} else {
 			line = strings.Join(row, " ")
+		}
+		if ap.CmdParams.MoreBlanks {
+			line = strings.Replace(line, "§", " ", -1)
 		}
 		fmt.Println(line)
 	}

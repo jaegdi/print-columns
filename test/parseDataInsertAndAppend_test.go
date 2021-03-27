@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var filename = `/home/jaegdi/devel/go/pc-go/test/data.txt`
+var filename = `/home/jaegdi/devel/go/pc-go/test/data/data.txt`
 
 // Test GetLineString, line with fixed length columns seperated by two or more blanks
 func TestParseDataFromFileLine1(t *testing.T) {

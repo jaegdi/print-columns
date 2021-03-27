@@ -10,8 +10,8 @@ import (
 
 func TestMaxlenDataFromFileLine1(t *testing.T) {
 	ap.CmdParams.MoreBlanks = true
-	filename := `/home/jaegdi/devel/go/pc-go/test/data.txt`
-	sep := ' '
+	filename := `/home/jaegdi/devel/go/pc-go/test/data/data.txt`
+	sep := []rune(ap.CmdParams.Sep)[0]
 	data := ld.GetData(filename)
 	want := df.T_maxlenghts{1, 2, 3, 3, 5, 6}
 	d := df.DataParse(data, sep)

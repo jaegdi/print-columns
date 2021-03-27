@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// LineParse parses the text line and split into fields, return a slice of strings.
+// optionale it can detect cloiuns with blanks, but therefor the columns in the textline
+// must separated by more than one blank.
 func LineParse(line string, sep rune) T_dataline {
 	inQuotedTextSingle := false
 	inQuotedTextDouble := false
@@ -16,7 +19,7 @@ func LineParse(line string, sep rune) T_dataline {
 		re1 := regexp.MustCompile(fmt.Sprintf("%s%s+", seps, seps))
 		if re1.MatchString(line) {
 			re2 := regexp.MustCompile(fmt.Sprintf("([^%s])%s([^%s])", seps, seps, seps))
-			s = re2.ReplaceAllString(line, `${1}_${2}`)
+			s = re2.ReplaceAllString(line, `${1}§${2}`)
 			s = re1.ReplaceAllString(s, seps)
 		} else {
 			s = line
@@ -39,12 +42,14 @@ func LineParse(line string, sep rune) T_dataline {
 	return ss
 }
 
+// GetLineSlice returns a parsed and splittet line as string
 func GetLineSlice(line string) string {
 	return fmt.Sprintln(
 		LineParse(line, ' '))
 }
 
-func DataParse(data []string, sep rune) T_parsedData {
+// DataParse parses an slice of stringlines into T_parsedData ( [][]string )
+func DataParse(data T_rawdata, sep rune) T_parsedData {
 	pdata := T_parsedData{}
 	for _, l := range data {
 		dataline := LineParse(l, sep)

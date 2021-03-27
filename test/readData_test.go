@@ -9,7 +9,7 @@ import (
 
 // Test GetLineString, line with fixed length columns seperated by two or more blanks
 func TestReadDataFromFile(t *testing.T) {
-	filename := `/home/jaegdi/devel/go/pc-go/test/data.txt`
+	filename := `/home/jaegdi/devel/go/pc-go/test/data/data.txt`
 	want := []string{
 		"A B C D E F",
 		"F  B  C  A B  E  F",

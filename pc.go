@@ -13,11 +13,7 @@ func init() {
 func main() {
 	ap.EvalFlags()
 	rawdata := df.T_rawdata(ld.GetData(""))
-	pdata := df.T_parsedData{}
-	sep := []rune(ap.CmdParams.Colsep)[0]
-	for _, v := range rawdata {
-		l := df.LineParse(v, sep)
-		pdata.Append(l)
-	}
+	sep := []rune(ap.CmdParams.Sep)[0]
+	pdata := df.DataParse(rawdata, sep)
 	df.Format(pdata)
 }

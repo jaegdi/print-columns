@@ -7,6 +7,7 @@ import (
 	ap "pc/argparse"
 )
 
+// get StdinData read data from STDIN
 func getStdinData() []string {
 	data := []string{}
 	if checkStdin() {
@@ -22,6 +23,7 @@ func getStdinData() []string {
 	return data
 }
 
+// getFielData read data from file.
 func getFileData(fname string) []string {
 	data := []string{}
 	file, err := os.Open(fname)
@@ -40,13 +42,11 @@ func getFileData(fname string) []string {
 	return data
 }
 
+// GetDat read data from file, if param file is set and append data from STDIN, if there some data.
 func GetData(filename string) []string {
 	data := []string{}
-	if filename == "" {
-		filename = ap.CmdParams.Filename
-	}
-	if filename != "" {
-		data = getFileData(filename)
+	if ap.CmdParams.Filename != "" {
+		data = getFileData(ap.CmdParams.Filename)
 	}
 	if checkStdin() {
 		data = append(data, getStdinData()...)

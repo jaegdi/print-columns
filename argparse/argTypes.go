@@ -12,6 +12,7 @@ type T_ColNumbers []T_ColNum
 type T_flags struct {
 	Filename   string
 	Header     string
+	Sep        string
 	Colsep     string
 	Filter     string
 	Gcol       T_ColNum
