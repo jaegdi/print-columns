@@ -18,7 +18,11 @@
             "mode": "debug",
             "program": "${workspaceFolder}",
             "args": [
-                "-file=test/data.txt"
+                "-file=test/data2.txt",
+                "-pp",
+                "-ts",
+                "--header='Rights Inode User Group Size Day Month Time Name'",
+                "--gcol=1"
             ]
         }
     ]

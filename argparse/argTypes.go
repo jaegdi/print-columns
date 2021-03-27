@@ -10,23 +10,24 @@ type T_ColNum int
 type T_ColNumbers []T_ColNum
 
 type T_flags struct {
-	Filename string
-	Header   string
-	Colsep   string
-	Filter   string
-	Gcol     T_ColNum
-	Ts       bool
-	Fs       bool
-	Cs       bool
-	Pp       bool
-	Rh       bool
-	Num      bool
-	Csv      bool
-	Json     bool
-	Help     bool
-	Manual   bool
-	Grouping bool
-	Columns  T_ColNumbers
+	Filename   string
+	Header     string
+	Colsep     string
+	Filter     string
+	Gcol       T_ColNum
+	Ts         bool
+	Fs         bool
+	Cs         bool
+	Pp         bool
+	Rh         bool
+	Num        bool
+	Csv        bool
+	Json       bool
+	Help       bool
+	Manual     bool
+	Grouping   bool
+	MoreBlanks bool
+	Columns    T_ColNumbers
 }
 
 func (t T_flags) Print() {

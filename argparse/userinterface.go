@@ -207,6 +207,7 @@ func EvalFlags() {
 	csPtr := flag.Bool("cs", false, "ColumnSeparator, draws a separator (default=|) between columns of output")
 	ppPtr := flag.Bool("pp", false, "PrettyPrint,     draw cell borders and all separators")
 	rhPtr := flag.Bool("rh", false, "RemoveHeader,    removes the first line")
+	mbPtr := flag.Bool("mb", false, "MoreBlanks,      more than one blank to split columns")
 	numPtr := flag.Bool("num", false, "Num-bering,      insert col numbers in the first line")
 	csvPtr := flag.Bool("csv", false, "CSV,             write output in CSV format")
 	jsnPtr := flag.Bool("json", false, "JSON,            write output in JSON format")
@@ -217,22 +218,23 @@ func EvalFlags() {
 
 	// define map with all flags
 	flags := T_flags{
-		Filename: string(*filenmPtr),
-		Header:   string(*headerPtr),
-		Colsep:   string(*colsepPtr),
-		Filter:   string(*filterPtr),
-		Gcol:     T_ColNum(*gcolnrPtr),
-		Ts:       bool(*tsPtr),
-		Fs:       bool(*fsPtr),
-		Cs:       bool(*csPtr),
-		Pp:       bool(*ppPtr),
-		Rh:       bool(*rhPtr),
-		Num:      bool(*numPtr),
-		Csv:      bool(*csvPtr),
-		Json:     bool(*jsnPtr),
-		Help:     bool(*hlpPtr),
-		Manual:   bool(*manPtr),
-		Columns:  getArgsColNumbers(),
+		Filename:   string(*filenmPtr),
+		Header:     string(*headerPtr),
+		Colsep:     string(*colsepPtr),
+		Filter:     string(*filterPtr),
+		Gcol:       T_ColNum(*gcolnrPtr),
+		Ts:         bool(*tsPtr),
+		Fs:         bool(*fsPtr),
+		Cs:         bool(*csPtr),
+		Pp:         bool(*ppPtr),
+		Rh:         bool(*rhPtr),
+		Num:        bool(*numPtr),
+		Csv:        bool(*csvPtr),
+		Json:       bool(*jsnPtr),
+		Help:       bool(*hlpPtr),
+		Manual:     bool(*manPtr),
+		MoreBlanks: bool(*mbPtr),
+		Columns:    getArgsColNumbers(),
 	}
 
 	CmdParams = flags

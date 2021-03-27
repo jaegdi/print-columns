@@ -2,7 +2,7 @@ package main
 
 import (
 	ap "pc/argparse"
-	lp "pc/lineparse"
+	df "pc/dataformat"
 	ld "pc/loaddata"
 )
 
@@ -12,12 +12,12 @@ func init() {
 
 func main() {
 	ap.EvalFlags()
-	rawdata := lp.T_rawdata(ld.GetData(""))
-	pdata := lp.T_parsedData{}
+	rawdata := df.T_rawdata(ld.GetData(""))
+	pdata := df.T_parsedData{}
 	sep := []rune(ap.CmdParams.Colsep)[0]
 	for _, v := range rawdata {
-		l := lp.LineParse(v, sep)
-		pdata = pdata.Append(l)
+		l := df.LineParse(v, sep)
+		pdata.Append(l)
 	}
-	pdata.Print()
+	df.Format(pdata)
 }

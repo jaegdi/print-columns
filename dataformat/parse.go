@@ -1,33 +1,17 @@
 package pc
 
 import (
-	"encoding/json"
 	"fmt"
+	ap "pc/argparse"
 	"regexp"
 	"strings"
 )
-
-type T_rawdata []string
-type T_dataline []string
-type T_parsedData []T_dataline
-
-func (d T_parsedData) Print() {
-	b, err := json.MarshalIndent(d, "", "  ")
-	if err == nil {
-		fmt.Println(string(b))
-	}
-}
-
-func (d T_parsedData) Append(l T_dataline) T_parsedData {
-	d = append(d, l)
-	return d
-}
 
 func LineParse(line string, sep rune) T_dataline {
 	inQuotedTextSingle := false
 	inQuotedTextDouble := false
 	var s string
-	if sep == ' ' {
+	if sep == ' ' && ap.CmdParams.MoreBlanks {
 		seps := string(sep)
 		re1 := regexp.MustCompile(fmt.Sprintf("%s%s+", seps, seps))
 		if re1.MatchString(line) {
@@ -55,7 +39,17 @@ func LineParse(line string, sep rune) T_dataline {
 	return ss
 }
 
-func GetLineString(line string) string {
+func GetLineSlice(line string) string {
 	return fmt.Sprintln(
 		LineParse(line, ' '))
+}
+
+func DataParse(data []string, sep rune) T_parsedData {
+	pdata := T_parsedData{}
+	for _, l := range data {
+		dataline := LineParse(l, sep)
+		// fmt.Println(dataline)
+		pdata = append(pdata, dataline)
+	}
+	return pdata
 }

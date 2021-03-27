@@ -13,6 +13,7 @@ func TestReadDataFromFile(t *testing.T) {
 	want := []string{
 		"A B C D E F",
 		"F  B  C  A B  E  F",
+		"a bb ccc dd eeeee ffffff",
 	}
 	erg := ld.GetData(filename)
 	if !reflect.DeepEqual(erg, want) {

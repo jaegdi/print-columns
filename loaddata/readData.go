@@ -2,7 +2,6 @@ package pc
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	ap "pc/argparse"
@@ -11,7 +10,7 @@ import (
 func getStdinData() []string {
 	data := []string{}
 	if checkStdin() {
-		fmt.Println("Something on STDIN")
+		// fmt.Println("Something on STDIN")
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			data = append(data, scanner.Text())

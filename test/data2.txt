@@ -1,0 +1,9 @@
+insgesamt  2324
+drwxr-xr-x.  1  jaegdi  jaegdi            54  24.  Mär  13:16  argparse
+drwxr-xr-x.  1  jaegdi  jaegdi            44  26.  Mär  16:03  dataformat
+drwxrwxr-x.  1  jaegdi  jaegdi            16  26.  Mär  12:37  dataparse
+-rw-rw-r--.  1  jaegdi  jaegdi            19  23.  Mär  09:25  go.mod
+drwxr-xr-x.  1  jaegdi  jaegdi            48  24.  Mär  19:11  loaddata
+-rwxrwxr-x.  1  jaegdi  jaegdi  2371564  24.  Mär  19:03  pc
+-rwxrwxr-x.  1  jaegdi  jaegdi          373  26.  Mär  18:07  pc.go
+drwxr-xr-x.  1  jaegdi  jaegdi          192  26.  Mär  21:04  test
