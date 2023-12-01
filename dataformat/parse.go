@@ -43,7 +43,7 @@ func LineParse(line string, sep rune) T_dataline {
 		}
 		return false
 	}))
-	for i, _ := range ss {
+	for i := range ss {
 		ss[i] = strings.Replace(ss[i], "\n", " ", -1)
 	}
 	return ss
