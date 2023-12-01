@@ -74,7 +74,7 @@ AUTHOR
 COPYRIGHT
     Copyright © 2020 Free Software Foundation, Inc.  License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
     This is free software: you are free to change and redistribute it.  There is NO WARRANTY, to the extent permitted by law.
-    
+
 Usage: ./pc [OPTIONS] argument ...
 
 
@@ -141,15 +141,15 @@ EXAMPLES
         result:
         NODE                      | NAMESPACE             | NAME                                               | RESTARTS | AGE
         ------------------------- | --------------------- | -------------------------------------------------- | -------- | ---
-        int-apc0-wrk-v08.sf-rz.de | app-monitoring        | prometheus-prometheus-0                            | 11       | 1d
-        int-apc0-wrk-v10.sf-rz.de | br-test               | rsync-container-1-trkwt                            | 1        | 27d
-        int-apc0-inf-v01.sf-rz.de | cluster-tasks         | ldapgroupsync-1583331300-86bg8                     | 0        | 22d
-        int-apc0-inf-v01.sf-rz.de | cluster-tasks         | ldapgroupsync-1583334900-fsh48                     | 0        | 22d
-        int-apc0-inf-v01.sf-rz.de | cluster-tasks         | prune-builds-1585239000-lrncj                      | 0        | 1h
-        int-apc0-inf-v01.sf-rz.de | cluster-tasks         | prune-deployments-1585242300-vr22s                 | 0        | 24m
-        int-apc0-inf-v01.sf-rz.de | cluster-tasks         | registry-image-pruning-1585235220-prbj7            | 0        | 2h
-        int-apc0-inf-v03.sf-rz.de | default               | docker-registry-5-bxk5x                            | 0        | 27d
-        int-apc0-mst-v00.sf-rz.de | default               | registry-console-7-sj72f                           | 0        | 8d
+        host-wrk-v08.my-domain.de | app-monitoring        | prometheus-prometheus-0                            | 11       | 1d
+        host-wrk-v10.my-domain.de | br-test               | rsync-container-1-trkwt                            | 1        | 27d
+        host-inf-v01.my-domain.de | cluster-tasks         | ldapgroupsync-1583331300-86bg8                     | 0        | 22d
+        host-inf-v01.my-domain.de | cluster-tasks         | ldapgroupsync-1583334900-fsh48                     | 0        | 22d
+        host-inf-v01.my-domain.de | cluster-tasks         | prune-builds-1585239000-lrncj                      | 0        | 1h
+        host-inf-v01.my-domain.de | cluster-tasks         | prune-deployments-1585242300-vr22s                 | 0        | 24m
+        host-inf-v01.my-domain.de | cluster-tasks         | registry-image-pruning-1585235220-prbj7            | 0        | 2h
+        host-inf-v03.my-domain.de | default               | docker-registry-5-bxk5x                            | 0        | 27d
+        host-mst-v00.my-domain.de | default               | registry-console-7-sj72f                           | 0        | 8d
 
     - Filter the output of a command and convert to json
         cmd:  oc get pod -o wide --all-namespaces |pc -ts -cs -json --filter='wrk-v01'   8 1 2 5 6
@@ -157,21 +157,21 @@ EXAMPLES
         {
             "data": [
                 [
-                    "int-apc0-wrk-v01.sf-rz.de",
+                    "host-wrk-v01.my-domain.de",
                     "fpc-fa2",
-                    "datenkopie-zulieferung-46-46dhb",
+                    "podname-46-46dhb",
                     "1",
                     "8h"
                 ],
                 [
-                    "int-apc0-wrk-v01.sf-rz.de",
+                    "host-wrk-v01.my-domain.de",
                     "fpc-int1",
-                    "datenkopie-zulieferung-64-pdp5r",
+                    "podname-64-pdp5r",
                     "1",
                     "8h"
                 ],
                 [
-                    "int-apc0-wrk-v01.sf-rz.de",
+                    "host-wrk-v01.my-domain.de",
                     "openshift-logging",
                     "logging-fluentd-6bg5h",
                     "3",
@@ -179,4 +179,4 @@ EXAMPLES
                 ]
             ]
         }
-    
+
