@@ -44,7 +44,8 @@ DESCRIPTION
                                            two blanks ore more.
         -colsep='|'       ColumnSeparator  define the character to separate the columns, default='|'.
         -filter='string'  Filter lines,    process only lines where 'string' is found.
-        -sortcol=colnum:  SortColumn       number of column, to sort for
+        -sortcol=colnum:  SortColumn       number of column, to sort for. Only one column can be defined for sort.
+                                           Number refers to the number of the output column.
         -gcol=colnum:     GroupCol         write a separator when the value in this column is different
                                            to the value in the previous line to group the values in this column.
                                            Number refers to the number of the output column.
@@ -74,7 +75,7 @@ COPYRIGHT
     Copyright © 2020 Free Software Foundation, Inc.  License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
     This is free software: you are free to change and redistribute it.  There is NO WARRANTY, to the extent permitted by law.
 
-Usage: pc [OPTIONS] argument ...
+Usage: ./pc [OPTIONS] argument ...
 
 
 EXAMPLES
@@ -158,14 +159,14 @@ EXAMPLES
                 [
                     "host-wrk-v01.my-domain.de",
                     "fpc-fa2",
-                    "datenkopie-zulieferung-46-46dhb",
+                    "podname-46-46dhb",
                     "1",
                     "8h"
                 ],
                 [
                     "host-wrk-v01.my-domain.de",
                     "fpc-int1",
-                    "datenkopie-zulieferung-64-pdp5r",
+                    "podname-64-pdp5r",
                     "1",
                     "8h"
                 ],
