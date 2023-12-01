@@ -104,7 +104,7 @@ EXAMPLES
         aa                bbbbb           cc         dd             ee              ffffffffff
 
     - To print that file formated with additional header and columnseparator:
-        cmd: pc --file=data2.txt --header='col-1 col-2 col-3 col-4 col-5 col-6'
+        cmd: pc --file=data2.txt --header='col-1 col-2 col-3 col-4 col-5 col-6' -cs
              or   cat data2.txt | pc --header='col-1 col-2 col-3 col-4 col-5 col-6' -cs
         result:
         col-1           | col-2         | col-3    | col-4        | col-5         | col-6
@@ -114,7 +114,7 @@ EXAMPLES
         aa              | bbbbb         | cc       | dd           | ee            | ffffffffff
 
     - To print that file formated with additional header and prettyprint:
-        cmd: pc --file=data2.txt --header='col-1 col-2 col-3 col-4 col-5 col-6'
+        cmd: pc --file=data2.txt --header='col-1 col-2 col-3 col-4 col-5 col-6' -pp
              or   cat data2.txt | pc --header='col-1 col-2 col-3 col-4 col-5 col-6' -pp
         result:
         | --------------- | ------------- | -------- | ------------ | ------------- | ----------- |
@@ -151,21 +151,21 @@ EXAMPLES
         host-mst-v00.my-domain.de | default               | registry-console-7-sj72f                           | 0        | 8d
 
     - Filter the output of a command and convert to json
-        cmd:  oc get pod -o wide --all-namespaces |pc -ts -cs -json --filter='wrk-v01'   8 1 2 5 6
+        cmd:  oc get pod -o wide --all-namespaces |pc -json --filter='wrk-v01'   8 1 2 5 6
         result:
         {
             "data": [
                 [
                     "host-wrk-v01.my-domain.de",
-                    "fpc-fa2",
-                    "datenkopie-zulieferung-46-46dhb",
+                    "fxc-fa2",
+                    "pod1-46-46dhb",
                     "1",
                     "8h"
                 ],
                 [
                     "host-wrk-v01.my-domain.de",
-                    "fpc-int1",
-                    "datenkopie-zulieferung-64-pdp5r",
+                    "fxc-int1",
+                    "pod1-64-pdp5r",
                     "1",
                     "8h"
                 ],
