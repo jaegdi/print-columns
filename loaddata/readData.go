@@ -2,6 +2,7 @@ package pc
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	ap "pc/argparse"
@@ -46,7 +47,9 @@ func getFileData(fname string) []string {
 func GetData(filename string) []string {
 	data := []string{}
 	if ap.CmdParams.Filename != "" {
-		data = getFileData(ap.CmdParams.Filename)
+		fmt.Println("GetData filename:", filename)
+		data = getFileData(filename)
+		fmt.Println("GetData data:", data)
 	}
 	if checkStdin() {
 		data = append(data, getStdinData()...)

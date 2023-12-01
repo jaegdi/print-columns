@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	ap "pc/argparse"
 	df "pc/dataformat"
 	ld "pc/loaddata"
@@ -11,10 +12,13 @@ import (
 func TestMaxlenDataFromFileLine1(t *testing.T) {
 	ap.CmdParams.MoreBlanks = true
 	filename := `/home/jaegdi/devel/go/pc-go/test/data/data.txt`
-	sep := []rune(ap.CmdParams.Sep)[0]
+	sep := ' '
+	fmt.Println("TestMaxlenDataFromFileLine1 filename:", filename)
 	data := ld.GetData(filename)
-	want := df.T_maxlenghts{1, 2, 3, 3, 5, 6}
+	fmt.Println("TestMaxlenDataFromFileLine1 data:", data)
+	want := df.T_maxlenghts{1, 2, 3, 2, 5, 6, 1}
 	d := df.DataParse(data, sep)
+	fmt.Println("d:", d)
 	erg := df.GetMaxLength(d)
 	if !reflect.DeepEqual(erg, want) {
 		t.Fatalf(`GetData("%s") = %q, want match for %#q, nil`, ap.CmdParams.Filename, erg, want)

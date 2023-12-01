@@ -2,6 +2,7 @@ package pc
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"strings"
 )
@@ -16,6 +17,8 @@ type T_flags struct {
 	Colsep     string
 	Filter     string
 	Gcol       T_ColNum
+	SortCol    T_ColNum
+	Nhl        bool
 	Ts         bool
 	Fs         bool
 	Cs         bool
@@ -28,12 +31,13 @@ type T_flags struct {
 	Manual     bool
 	Grouping   bool
 	MoreBlanks bool
+	verify     bool
 	Columns    T_ColNumbers
 }
 
 func (t T_flags) Print() {
 	v := reflect.ValueOf(t)
 	for i := 0; i < v.NumField(); i++ {
-		fmt.Printf("  -%-15s: %v\n", strings.ToLower(v.Type().Field(i).Name), v.Field(i))
+		fmt.Fprintf(os.Stderr, "  -%-15s: %v\n", strings.ToLower(v.Type().Field(i).Name), v.Field(i))
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	ap "pc/argparse"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -74,7 +75,7 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 func (data *T_parsedData) InsertGroupSeperator(gcol int, trenner []string) {
 	nd := T_parsedData{}
 	if gcol > 0 && gcol <= len(*data)+1 {
-		gcol = gcol - 1
+		gcol -= 1
 		ref := ""
 		if len((*data)[0]) > gcol {
 			ref = (*data)[0][gcol]
@@ -86,7 +87,7 @@ func (data *T_parsedData) InsertGroupSeperator(gcol int, trenner []string) {
 				nd.Append(row)
 			} else {
 				if i > 0 && len(row) > gcol && ref == row[gcol] && row[gcol] != trenner[gcol] {
-					row[gcol] = ""
+					row[gcol] = "''"
 				}
 				nd.Append(row)
 				if ref == trenner[gcol] {
@@ -149,6 +150,28 @@ func (data *T_parsedData) insertTrenner(trenner []string) {
 	}
 }
 
+// sort data on k column
+func (data *T_parsedData) sort(k int) {
+	k -= 1
+	l1 := T_dataline{}
+	d := T_parsedData{}
+	if !ap.CmdParams.Nhl {
+		l1 = (*data)[0]
+		d = (*data)[1:]
+	} else {
+		d = *data
+	}
+	sort.SliceStable(d, func(i, j int) bool {
+		return d[i][k] < d[j][k]
+	})
+	da := T_parsedData{}
+	if !ap.CmdParams.Nhl {
+		da = append(da, l1)
+	}
+	da = append(da, d...)
+	*data = da
+}
+
 // format data to column max width
 func (data *T_parsedData) formatDataToMaxWidth(maxlen []int) {
 	for i := range *data {
@@ -162,7 +185,7 @@ func (data *T_parsedData) printAsciiTab() {
 	for _, row := range *data {
 		var line string
 		if ap.CmdParams.Pp || ap.CmdParams.Cs {
-			line = "| " + strings.Join(row, " | ") + " |"
+			line = ap.CmdParams.Colsep + " " + strings.Join(row, " "+ap.CmdParams.Colsep+" ") + " " + ap.CmdParams.Colsep
 		} else {
 			line = strings.Join(row, " ")
 		}
@@ -178,17 +201,22 @@ func (data *T_parsedData) printAsciiTab() {
 // Print the data as CSV, JSON or ASCII table depending on options.
 func Format(data T_parsedData) {
 	//  set seperator rune
-	sep := []rune(ap.CmdParams.Colsep)[0]
+	sep := []rune(ap.CmdParams.Sep)[0]
 
 	// select data columns
 	if len(ap.CmdParams.Columns) > 0 {
 		data.selectColumns()
 	}
 
-	// select columns from header
+	if ap.CmdParams.SortCol > 0 {
+		data.sort(int(ap.CmdParams.SortCol))
+	}
+
+	// Insert Headerline from CmdParams
 	if ap.CmdParams.Header != "" {
 		headerline := LineParse(ap.CmdParams.Header, sep)
 		if len(ap.CmdParams.Columns) > 0 && len(headerline) > len(ap.CmdParams.Columns) {
+			// select columns from header
 			headerline.selectColumns()
 		}
 		data.Insert(headerline, 0)

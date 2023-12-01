@@ -21,8 +21,8 @@
                 "-file=test/data/data2.txt",
                 "-pp",
                 "-ts",
-                "--header='Rights Inode User Group Size Day Month Time Name'",
-                "--gcol=1"
+                "--header='Rights  Inode  User  Group  Size  Day  Month  Time  Name'",
+                "-filter=9=jaegdi"
             ]
         }
     ]
