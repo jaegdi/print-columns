@@ -18,6 +18,8 @@ type T_flags struct {
 	Filter     string
 	Gcol       T_ColNum
 	SortCol    T_ColNum
+	ColSepW    int
+	Nf         bool
 	Nhl        bool
 	Ts         bool
 	Fs         bool

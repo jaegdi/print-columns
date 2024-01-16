@@ -36,13 +36,13 @@ func (d T_parsedData) PrintCsv() {
 	}
 }
 
-//  Append appends a dataline
+// Append appends a dataline
 func (d *T_parsedData) Append(l T_dataline) {
 	*d = append(*d, l)
 	// return d
 }
 
-//  Insert inserts a dataline at gievn position
+// Insert inserts a dataline at gievn position
 func (d *T_parsedData) Insert(l T_dataline, pos int) {
 	if pos >= 0 && pos <= len(*d) {
 		*d = append(*d, l)
@@ -181,13 +181,13 @@ func (data *T_parsedData) formatDataToMaxWidth(maxlen []int) {
 
 // printAsciiTab prints the data as ASCII table
 func (data *T_parsedData) printAsciiTab() {
-
+	sp := strings.Repeat(" ", ap.CmdParams.ColSepW)
 	for _, row := range *data {
 		var line string
 		if ap.CmdParams.Pp || ap.CmdParams.Cs {
-			line = ap.CmdParams.Colsep + " " + strings.Join(row, " "+ap.CmdParams.Colsep+" ") + " " + ap.CmdParams.Colsep
+			line = ap.CmdParams.Colsep + sp + strings.Join(row, sp+ap.CmdParams.Colsep+sp) + sp + ap.CmdParams.Colsep
 		} else {
-			line = strings.Join(row, " ")
+			line = strings.Join(row, sp)
 		}
 		if ap.CmdParams.MoreBlanks {
 			line = strings.Replace(line, "§", " ", -1)
@@ -267,7 +267,9 @@ func Format(data T_parsedData) {
 	data.InsertGroupSeperator(int(ap.CmdParams.Gcol), trenner)
 
 	// format all columns for maxlen column width
-	data.formatDataToMaxWidth(maxlen)
+	if !ap.CmdParams.Nf {
+		data.formatDataToMaxWidth(maxlen)
+	}
 
 	// print data slices as line with or without column seperator
 	data.printAsciiTab()
