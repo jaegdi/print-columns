@@ -9,7 +9,7 @@ import (
 )
 
 // LineParse parses the text line and split into fields, return a slice of strings.
-// optionale it can detect columns with blanks, but therefor the columns in the textline
+// optionale it can detect columns with blanks, but therefore the columns in the textline
 // must separated by more than one blank.
 func LineParse(line string, sep rune) T_dataline {
 	inQuotedTextSingle := false
@@ -51,8 +51,7 @@ func LineParse(line string, sep rune) T_dataline {
 
 // GetLineSlice returns a parsed and splittet line as string
 func GetLineSlice(line string) string {
-	return fmt.Sprintln(
-		LineParse(line, ' '))
+	return fmt.Sprintln(LineParse(line, ' '))
 }
 
 // setFilter returns the col for filter (-1 if col undefined) and the compiled regexp

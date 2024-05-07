@@ -7,21 +7,107 @@ import (
 	"log"
 	"os"
 	ap "pc/argparse"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
 	"unicode/utf8"
+
+	pluralize "github.com/gertd/go-pluralize"
+	"golang.org/x/exp/slices"
 )
 
 type T_rawdata []string
 type T_dataline []string
 type T_parsedData []T_dataline
 
+func printJSON(d T_parsedData) {
+	//  set seperator rune
+	sep := []rune(ap.CmdParams.Sep)[0]
+	// split headerline
+	header := LineParse(ap.CmdParams.Header, sep)
+	fmt.Println("[")
+	lines := len(d)
+	for ln, line := range d {
+		fmt.Println("  {")
+		l := len(line)
+		for col, val := range line {
+			fmt.Print("    \"", header[col], "\": \"", val, "\"")
+			if col+1 < l {
+				fmt.Println(",")
+			} else {
+				fmt.Println("")
+			}
+		}
+		if ln+1 < lines {
+			fmt.Println("  },")
+		} else {
+			fmt.Println("  }")
+		}
+	}
+	fmt.Println("]")
+}
+
+func printJSONwithTC(d T_parsedData) {
+	//  set seperator rune
+	sep := []rune(ap.CmdParams.Sep)[0]
+	// split headerline
+	header := d[0]
+	if ap.CmdParams.Header != "" {
+		header = LineParse(ap.CmdParams.Header, sep)
+	}
+	if ap.CmdParams.Ts {
+		d = d[1:]
+	}
+	hkey := header[0]
+	header = header[1:]
+	lines := len(d)
+
+	pl := pluralize.NewClient()
+	fmt.Println("{")
+	fmt.Print("  \"", pl.Plural(hkey), "\": [")
+	fmt.Println("")
+	for ln, line := range d {
+		fmt.Println("    {")
+		hval := line[0]
+		fmt.Print("      \"", hkey, "\": \"", hval, "\"")
+		fmt.Println(",")
+		fmt.Println("      \"data\": {")
+		line = line[1:]
+		l := len(line)
+		for col, val := range line {
+			fmt.Print("        \"", header[col], "\": \"", val, "\"")
+			if col+1 < l {
+				fmt.Println(",")
+			} else {
+				fmt.Println("")
+			}
+		}
+		fmt.Println("      }")
+		if ln+1 < lines {
+			fmt.Println("    },")
+		} else {
+			fmt.Println("    }")
+		}
+	}
+	fmt.Println("  ]")
+	fmt.Println("}")
+}
+
 // PrintJson prints data as JSON
 func (d T_parsedData) PrintJson() {
-	b, err := json.MarshalIndent(d, "", "  ")
-	if err == nil {
-		fmt.Println(string(b))
+	if ap.CmdParams.Header == "" && !ap.CmdParams.Ts {
+		b, err := json.MarshalIndent(d, "", "  ")
+		if err == nil {
+			fmt.Println(string(b))
+		}
+	} else {
+		if ap.CmdParams.Jtc || ap.CmdParams.Ts {
+			// use first column as key
+			printJSONwithTC(d)
+		} else {
+			printJSON(d)
+		}
 	}
 }
 
@@ -42,7 +128,7 @@ func (d *T_parsedData) Append(l T_dataline) {
 	// return d
 }
 
-// Insert inserts a dataline at gievn position
+// Insert inserts a dataline at given position
 func (d *T_parsedData) Insert(l T_dataline, pos int) {
 	if pos >= 0 && pos <= len(*d) {
 		*d = append(*d, l)
@@ -58,12 +144,16 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 	// fmt.Println("dataline:", *data)
 	for pos, mxlen := range maxlen {
 		val := ""
-		if len((*data)) > pos {
+		if pos < len((*data)) {
 			val = (*data)[pos]
 			runecount := utf8.RuneCountInString(val)
 			blanklen := mxlen - runecount
 			// fmt.Println("pos:", pos, "mxlen:", mxlen, "runecount:", runecount, "blanklen:", blanklen, "val:", val)
-			(*data)[pos] = val + strings.Repeat(" ", blanklen)
+			if regexp.MustCompile(`^ *[0-9\.,]+ *$`).MatchString((*data)[pos]) && !ap.CmdParams.Nn {
+				(*data)[pos] = strings.Repeat(" ", blanklen) + val
+			} else {
+				(*data)[pos] = val + strings.Repeat(" ", blanklen)
+			}
 		} else {
 			(*data) = append((*data), strings.Repeat(" ", mxlen))
 		}
@@ -72,7 +162,7 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 
 // InsertGroupSeperator inserts a trenenr slice when the content of gcol changed the value.
 // Let further values of gcol empty until the next group change
-func (data *T_parsedData) InsertGroupSeperator(gcol int, trenner []string) {
+func (data *T_parsedData) InsertGroupSeperator(gcol int, gcolval bool, trenner []string) {
 	nd := T_parsedData{}
 	if gcol > 0 && gcol <= len(*data)+1 {
 		gcol -= 1
@@ -86,7 +176,7 @@ func (data *T_parsedData) InsertGroupSeperator(gcol int, trenner []string) {
 				ref = row[gcol]
 				nd.Append(row)
 			} else {
-				if i > 0 && len(row) > gcol && ref == row[gcol] && row[gcol] != trenner[gcol] {
+				if !gcolval && i > 0 && len(row) > gcol && ref == row[gcol] && row[gcol] != trenner[gcol] {
 					row[gcol] = "''"
 				}
 				nd.Append(row)
@@ -172,6 +262,11 @@ func (data *T_parsedData) sort(k int) {
 	*data = da
 }
 
+// delete elements from data
+func (data *T_parsedData) delete(i, j int) {
+	*data = slices.Delete(*data, i, j)
+}
+
 // format data to column max width
 func (data *T_parsedData) formatDataToMaxWidth(maxlen []int) {
 	for i := range *data {
@@ -208,12 +303,17 @@ func Format(data T_parsedData) {
 		data.selectColumns()
 	}
 
+	// remove header line, first row
+	if ap.CmdParams.Rh {
+		data.delete(0, 1)
+	}
+
 	if ap.CmdParams.SortCol > 0 {
 		data.sort(int(ap.CmdParams.SortCol))
 	}
 
 	// Insert Headerline from CmdParams
-	if ap.CmdParams.Header != "" {
+	if ap.CmdParams.Header != "" && !ap.CmdParams.Json {
 		headerline := LineParse(ap.CmdParams.Header, sep)
 		if len(ap.CmdParams.Columns) > 0 && len(headerline) > len(ap.CmdParams.Columns) {
 			// select columns from header
@@ -264,7 +364,7 @@ func Format(data T_parsedData) {
 	}
 
 	// insert trenner between GroupChange of gcol
-	data.InsertGroupSeperator(int(ap.CmdParams.Gcol), trenner)
+	data.InsertGroupSeperator(int(ap.CmdParams.Gcol), ap.CmdParams.GcolVal, trenner)
 
 	// format all columns for maxlen column width
 	if !ap.CmdParams.Nf {
