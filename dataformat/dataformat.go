@@ -162,7 +162,7 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 
 // InsertGroupSeperator inserts a trenenr slice when the content of gcol changed the value.
 // Let further values of gcol empty until the next group change
-func (data *T_parsedData) InsertGroupSeperator(gcol int, gcolval bool, trenner []string) {
+func (data *T_parsedData) InsertGroupSeperator(gcol int, gcolval bool, trenner, htrenner []string) {
 	nd := T_parsedData{}
 	if gcol > 0 && gcol <= len(*data)+1 {
 		gcol -= 1
@@ -171,18 +171,24 @@ func (data *T_parsedData) InsertGroupSeperator(gcol int, gcolval bool, trenner [
 			ref = (*data)[0][gcol]
 		}
 		for i, row := range *data {
-			if len(row) > gcol && ref != row[gcol] && ref != trenner[gcol] && row[gcol] != trenner[gcol] && i > 0 {
-				nd.Append(trenner)
-				ref = row[gcol]
-				nd.Append(row)
-			} else {
-				if !gcolval && i > 0 && len(row) > gcol && ref == row[gcol] && row[gcol] != trenner[gcol] {
-					row[gcol] = "''"
-				}
-				nd.Append(row)
-				if ref == trenner[gcol] {
+			// if we not on first line and not on a trenner line
+			if i > 0 && len(row) > gcol && row[gcol] != trenner[gcol] && row[gcol] != htrenner[gcol] {
+				// when ref (thats the field of the previous line) differs from the filed of the current line
+				if ref != row[gcol] && ref != trenner[gcol] && ref != htrenner[gcol] {
+					nd.Append(trenner)
+					//  set ref to the new field value
 					ref = row[gcol]
+					nd.Append(row)
+				} else {
+					//  if no difference in the field and gcolval is not set
+					if !gcolval && ref == row[gcol] {
+						row[gcol] = "''"
+					}
+					nd.Append(row)
 				}
+			} else {
+				nd.Append(row)
+				// ref = row[gcol]
 			}
 		}
 		*data = nd
@@ -220,21 +226,21 @@ func (data *T_dataline) selectColumns() {
 }
 
 // insertTrenner insert trenner for TitelSeperator, FooterSeperator or PrettyPrint
-func (data *T_parsedData) insertTrenner(trenner []string) {
+func (data *T_parsedData) insertTrenner(trenner, htrenner []string) {
 	if ap.CmdParams.Ts || ap.CmdParams.Fs || ap.CmdParams.Pp {
 		if ap.CmdParams.Pp {
 			if ap.CmdParams.Fs {
-				(*data).Insert(trenner, len(*data)-1)
+				(*data).Insert(htrenner, len(*data)-1)
 			}
 			(*data).Insert(trenner, 0)
 			(*data).Insert(trenner, 2)
 			(*data).Append(trenner)
 		} else {
 			if ap.CmdParams.Ts {
-				(*data).Insert(trenner, 1)
+				(*data).Insert(htrenner, 1)
 			}
 			if ap.CmdParams.Fs {
-				(*data).Insert(trenner, len((*data))-1)
+				(*data).Insert(htrenner, len((*data))-1)
 			}
 		}
 	}
@@ -342,13 +348,15 @@ func Format(data T_parsedData) {
 
 	//  define trenner slice
 	trenner := []string{}
+	htrenner := []string{}
 	for _, v := range maxlen {
 		trenner = append(trenner, strings.Repeat("-", v))
+		htrenner = append(htrenner, strings.Repeat("=", v))
 	}
 
 	// insert trenner for TitelSeperator, FooterSeperator or PrettyPrint
 	if !(ap.CmdParams.Json || ap.CmdParams.Csv) {
-		data.insertTrenner(trenner)
+		data.insertTrenner(trenner, htrenner)
 	}
 
 	// print CSV and return
@@ -364,7 +372,7 @@ func Format(data T_parsedData) {
 	}
 
 	// insert trenner between GroupChange of gcol
-	data.InsertGroupSeperator(int(ap.CmdParams.Gcol), ap.CmdParams.GcolVal, trenner)
+	data.InsertGroupSeperator(int(ap.CmdParams.Gcol), ap.CmdParams.GcolVal, trenner, htrenner)
 
 	// format all columns for maxlen column width
 	if !ap.CmdParams.Nf {
