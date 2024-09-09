@@ -11,9 +11,15 @@ GOOS=windows GOARCH=amd64 go build
 echo "generate ReadMe.md"
 ./pc -h > ReadMe.md
 
+openshiftversion="$( oc version|grep Server|perl -lpe 's/^Server Version: (\d+\.\d+)\.\d+$/$1/')"
+
 echo "Push to artifactory"
 artifactory-upload.sh  -lf=pc             -tr=scptools-bin-develop   -tf=tools/pc
+artifactory-upload.sh  -lf=pc             -tr=scptools-bin-develop   -tf="ocp-stable-${openshiftversion}/clients/pc"
+
 artifactory-upload.sh  -lf=pc.exe         -tr=scptools-bin-develop   -tf=tools/pc
+artifactory-upload.sh  -lf=pc.exe         -tr=scptools-bin-develop   -tf="ocp-stable-${openshiftversion}/clients/pc"
+
 artifactory-upload.sh  -lf=pc-ReadMe.md   -tr=scptools-bin-develop   -tf=tools/pc
 
 echo "Copy it to share folder PEWI4124://Daten"
