@@ -8,45 +8,67 @@ import (
 	"strings"
 )
 
-// LineParse parses the text line and split into fields, return a slice of strings.
-// optionale it can detect columns with blanks, but therefore the columns in the textline
-// must separated by more than one blank.
+// LineParse splits a text line into fields, optionally handling columns with multiple spaces.
+// It returns a slice of strings (T_dataline).
 func LineParse(line string, sep rune) T_dataline {
-	inQuotedTextSingle := false
-	inQuotedTextDouble := false
-	var s string
-	// if MoreBlanks is set, then only two sep are recognized as columns sep, a single sep
-	// is replaced by '\n' (this can not be content of a line)
+	// Handle the case of multiple spaces as separators
 	if sep == ' ' && ap.CmdParams.MoreBlanks {
-		seps := string(sep)
-		re1 := regexp.MustCompile(fmt.Sprintf("%s%s+", seps, seps))
-		if re1.MatchString(line) {
-			re2 := regexp.MustCompile(fmt.Sprintf("([^%s])%s([^%s])", seps, seps, seps))
-			s = re2.ReplaceAllString(line, "${1}\n${2}")
-			s = re1.ReplaceAllString(s, seps)
-		} else {
-			s = line
-		}
-	} else {
-		s = line
+		line = handleMultipleSpaces(line)
 	}
-	ss := T_dataline(strings.FieldsFunc(s, func(r rune) bool {
-		//  When sep = ' ' \t is also accepted as sep
-		if (r == sep || (sep == ' ' && r == '\t')) && !inQuotedTextSingle && !inQuotedTextDouble {
-			return true
-		}
-		if r == '\'' {
-			inQuotedTextSingle = !inQuotedTextSingle
-		}
-		if r == '"' {
-			inQuotedTextDouble = !inQuotedTextDouble
-		}
-		return false
-	}))
-	for i := range ss {
-		ss[i] = strings.Replace(ss[i], "\n", " ", -1)
+
+	// Split the line into fields
+	fields := splitFields(line, sep)
+
+	// Replace any newline characters with spaces in each field
+	for i := range fields {
+		fields[i] = strings.ReplaceAll(fields[i], "\n", " ")
 	}
-	return ss
+
+	return T_dataline(fields)
+}
+
+// handleMultipleSpaces replaces single spaces with newlines and multiple spaces with a single space.
+func handleMultipleSpaces(s string) string {
+	re1 := regexp.MustCompile(`\s{2,}`)
+	re2 := regexp.MustCompile(`([^\s])\s([^\s])`)
+
+	s = re1.ReplaceAllString(s, " ")
+	return re2.ReplaceAllString(s, "${1}\n${2}")
+}
+
+// splitFields splits a string into fields based on the separator, respecting quoted text.
+func splitFields(s string, sep rune) []string {
+	var fields []string
+	var field strings.Builder
+	inQuoteSingle, inQuoteDouble := false, false
+
+	for _, r := range s {
+		switch {
+		case r == '\'' && !inQuoteDouble:
+			// Toggle single quote state if not in double quotes
+			inQuoteSingle = !inQuoteSingle
+			field.WriteRune(r)
+		case r == '"' && !inQuoteSingle:
+			// Toggle double quote state if not in single quotes
+			inQuoteDouble = !inQuoteDouble
+			field.WriteRune(r)
+		case (r == sep || (sep == ' ' && r == '\t')) && !inQuoteSingle && !inQuoteDouble:
+			// If separator is found and not in quotes, add field to fields and reset
+			if field.Len() > 0 {
+				fields = append(fields, field.String())
+				field.Reset()
+			}
+		default:
+			// Add character to current field
+			field.WriteRune(r)
+		}
+	}
+
+	if field.Len() > 0 {
+		fields = append(fields, field.String())
+	}
+
+	return fields
 }
 
 // GetLineSlice returns a parsed and splittet line as string

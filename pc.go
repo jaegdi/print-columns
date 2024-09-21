@@ -1,3 +1,4 @@
+// Package pc fomat and filter text columns
 package main
 
 import (
