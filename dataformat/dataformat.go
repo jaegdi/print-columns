@@ -150,7 +150,7 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 			val = (*data)[pos]
 			runecount := utf8.RuneCountInString(val)
 			blanklen := mxlen - runecount
-			if regexp.MustCompile(`^ *[0-9\.,]+ *$`).MatchString(val) && !ap.CmdParams.Nn {
+			if regexp.MustCompile(`^ *[0-9\.,]+(k|m|d|h|H|M|J|Y|Ki|Mi|Gi){0,1} *$`).MatchString(val) && !ap.CmdParams.Nn {
 				(*data)[pos] = strings.Repeat(" ", blanklen) + val
 			} else {
 				(*data)[pos] = val + strings.Repeat(" ", blanklen)

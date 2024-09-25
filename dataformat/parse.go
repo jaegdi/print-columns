@@ -11,29 +11,28 @@ import (
 // LineParse splits a text line into fields, optionally handling columns with multiple spaces.
 // It returns a slice of strings (T_dataline).
 func LineParse(line string, sep rune) T_dataline {
+
+	var fields []string
+
 	// Handle the case of multiple spaces as separators
 	if sep == ' ' && ap.CmdParams.MoreBlanks {
 		line = handleMultipleSpaces(line)
-	}
-
-	// Split the line into fields
-	fields := splitFields(line, sep)
-
-	// Replace any newline characters with spaces in each field
-	for i := range fields {
-		fields[i] = strings.ReplaceAll(fields[i], "\n", " ")
+		fields = splitFields(line, '\n')
+		fmt.Println("fields:", fields)
+	} else {
+		fields = splitFields(line, sep)
 	}
 
 	return T_dataline(fields)
 }
 
-// handleMultipleSpaces replaces single spaces with newlines and multiple spaces with a single space.
+// handleMultipleSpaces replaces multiple spaces with a single space and ensures single-character fields are recognized.
 func handleMultipleSpaces(s string) string {
+	// Replace multiple spaces with a single space
 	re1 := regexp.MustCompile(`\s{2,}`)
-	re2 := regexp.MustCompile(`([^\s])\s([^\s])`)
+	s = re1.ReplaceAllString(s, "\n")
 
-	s = re1.ReplaceAllString(s, " ")
-	return re2.ReplaceAllString(s, "${1}\n${2}")
+	return s
 }
 
 // splitFields splits a string into fields based on the separator, respecting quoted text.
