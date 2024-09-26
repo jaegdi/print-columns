@@ -18,7 +18,6 @@ func LineParse(line string, sep rune) T_dataline {
 	if sep == ' ' && ap.CmdParams.MoreBlanks {
 		line = handleMultipleSpaces(line)
 		fields = splitFields(line, '\n')
-		fmt.Println("fields:", fields)
 	} else {
 		fields = splitFields(line, sep)
 	}
