@@ -1,3 +1,4 @@
-A B C D E F
-F  B  C  A B  E  F
-a bb ccc dd eeeee ffffff
+A  B   9  C    D   E      F       3
+F  B   5  C    A   B      E       F
+a  bb  2  ccc  dd  eeeee  ffffff  x
+1  2   1  3    2   5      6       1
