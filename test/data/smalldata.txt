@@ -1,0 +1,48 @@
+lrwxrwxrwx   1 root root    7  8. Dez 2023  bin -> usr/bin
+dr-xr-xr-x   1 root root  664 15. Jul 18:55 boot
+drwxr-xr-x  22 root root 5060 14. Okt 07:34 dev
+drwxr-xr-x   1 root root 5034 13. Okt 19:21 etc
+dr-xr-xr-x   1 root root    8 19. Okt 2022  home
+lrwxrwxrwx   1 root root    7  8. Dez 2023  lib -> usr/lib
+lrwxrwxrwx   1 root root    9  8. Dez 2023  lib64 -> usr/lib64
+drwxr-xr-x   1 root root   14 20. Feb 2024  media
+dr-xr-xr-x   1 root root    6 28. Apr 17:25 mnt
+dr-xr-xr-x   1 root root  116 27. Jul 22:10 opt
+dr-xr-xr-x 592 root root    0 13. Okt 21:23 proc
+drwx------   1 root root  332 10. Okt 21:24 root
+drwxr-xr-x  51 root root 1320 14. Okt 08:08 run
+lrwxrwxrwx   1 root root    8  8. Dez 2023  sbin -> usr/sbin
+dr-xr-xr-x   1 root root   22 19. Okt 2022  srv
+dr-xr-xr-x  13 root root    0 14. Okt 08:55 sys
+-rw-r--r--   1 root root    0 28. Aug 09:24 test
+drwxrwxrwt  70 root root 3000 14. Okt 08:53 tmp
+drwxr-xr-x   1 root root  160  8. Dez 2023  usr
+drwxr-xr-x   1 root root  142  8. Dez 2023  var
+lrwxrwxrwx 1 root root        41 10. Jul 13:37 config-6.9.7-1-default -> ../usr/lib/modules/6.9.7-1-default/config
+lrwxrwxrwx 1 root root        41 15. Jul 18:50 config-6.9.9-1-default -> ../usr/lib/modules/6.9.9-1-default/config
+drwxr-xr-x 4 root root      1024  1. Jan 1970  efi
+drwxr-xr-x 1 root root        98 15. Jul 18:55 grub2
+lrwxrwxrwx 1 root root        22 15. Jul 18:50 initrd -> initrd-6.9.9-1-default
+-rw------- 1 root root 108590986 15. Jul 18:52 initrd-6.9.7-1-default
+-rw------- 1 root root 107918661  4. Okt 14:16 initrd-6.9.9-1-default
+lrwxrwxrwx 1 root root        46 10. Jul 13:37 sysctl.conf-6.9.7-1-default -> ../usr/lib/modules/6.9.7-1-default/sysctl.conf
+lrwxrwxrwx 1 root root        46 15. Jul 18:50 sysctl.conf-6.9.9-1-default -> ../usr/lib/modules/6.9.9-1-default/sysctl.conf
+lrwxrwxrwx 1 root root        45 10. Jul 13:37 System.map-6.9.7-1-default -> ../usr/lib/modules/6.9.7-1-default/System.map
+lrwxrwxrwx 1 root root        45 15. Jul 18:50 System.map-6.9.9-1-default -> ../usr/lib/modules/6.9.9-1-default/System.map
+lrwxrwxrwx 1 root root        23 15. Jul 18:50 vmlinuz -> vmlinuz-6.9.9-1-default
+lrwxrwxrwx 1 root root        42 10. Jul 13:37 vmlinuz-6.9.7-1-default -> ../usr/lib/modules/6.9.7-1-default/vmlinuz
+lrwxrwxrwx 1 root root        42 15. Jul 18:50 vmlinuz-6.9.9-1-default -> ../usr/lib/modules/6.9.9-1-default/vmlinuz
+drwxr-xr-x 7 root root 1024 11. Nov 2023  EFI
+drwxr-xr-x 2 root root 1024  1. Jun 2022  System Volume Information
+drwxr-xr-x 2 root root 1024  1. Jun 2022  Boot
+drwxr-xr-x 5 root root 1024 11. Nov 2023  HP
+drwxr-xr-x 2 root root 1024 18. Okt 2022  Manjaro
+drwxr-xr-x 4 root root 1024  1. Jun 2022  Microsoft
+drwxr-xr-x 2 root root 1024 19. Okt 2022  opensuse
+-rwxr-xr-x 1 root root 151552 18. Okt 2022  bootx64.efi
+drwxr-xr-x 5 root root 1024 11. Nov 2023  BIOS
+drwxr-xr-x 2 root root 2048 11. Nov 2023  BIOSUpdate
+drwxr-xr-x 5 root root 1024 11. Nov 2023  DEVFW
+drwxr-xr-x 2 root root 1024 11. Nov 2023  Current
+drwxr-xr-x 2 root root 1024 11. Nov 2023  New
+drwxr-xr-x 2 root root 1024 11. Nov 2023  Previous
