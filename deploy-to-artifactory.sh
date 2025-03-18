@@ -25,3 +25,4 @@ artifactory-upload.sh  -lf=pc-ReadMe.md   -tr=scptools-bin-develop   -tf=tools/p
 echo "Copy it to share folder PEWI4124://Daten"
 cp pc pc.exe  /gast-drive-d/Daten
 cp pc-ReadMe.md  /gast-drive-d/Daten
+
