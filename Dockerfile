@@ -20,9 +20,9 @@ ENV GO_VERSION=1.23.7 \
     PATH="/usr/local/go/bin:${PATH}" \
     GOLANGTGZ="go${GO_VERSION}.linux-amd64.tar.gz"
 
-RUN wget -q https://go.dev/dl/$GOLANGTGZ && \
-    tar -C /usr/local -xzf $GOLANGTGZ && \
-    rm $GOLANGTGZ
+RUN wget -q https://go.dev/dl/$GOLANGTGZ
+RUN tar -C /usr/local -xzf $GOLANGTGZ
+RUN rm $GOLANGTGZ
 
 
 # Set the working directory
