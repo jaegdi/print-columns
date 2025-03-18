@@ -17,11 +17,12 @@ RUN yum install -y \
 ENV GO_VERSION=1.23.7 \
     CGO_CFLAGS="-std=c99 -Wno-implicit-function-declaration" \
     CGO_ENABLED=0 \
-    PATH="/usr/local/go/bin:${PATH}"
+    PATH="/usr/local/go/bin:${PATH}" \
+    GOLANGTGZ="go${GO_VERSION}.linux-amd64.tar.gz"
 
-RUN wget -q https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && \
-    rm go${GO_VERSION}.linux-amd64.tar.gz
+RUN wget -q https://go.dev/dl/$GOLANGTGZ && \
+    tar -C /usr/local -xzf $GOLANGTGZ && \
+    rm $GOLANGTGZ
 
 
 # Set the working directory
@@ -31,10 +32,11 @@ WORKDIR /app
 COPY . .
 
 # Build the pc binary with updated C99 and GCC flags
-RUN rm -f go.mod go.sum \
+RUN rm -f go.mod go.sum pc pc.exe\
  && go mod init pc \
  && go mod tidy \
- && go build -v -o ./dist
+ && echo "######## Now building the binary ##########" \
+ && if go build -v -o ./dist . ; then echo "######## Binary built successfully ##########"; fi
 
 # Set the entrypoint to the built binary
 CMD ["sleep", "infinity"]
