@@ -1,0 +1,8 @@
+/.tekton
+/.trunk
+/.vscode
+/build
+/pc
+/pc.exe
+/go.mod
+/go.sum

@@ -20,15 +20,9 @@ optspec=":bpidvhct-:"
 tagversion="$(get-git-tag.sh)"
 # per default make it all
 build='true'
-preparebuild='true'
-imagebuild='true'
-deploy='true'
 # if one or more params is given, then only this params is executed
 if [ $# -gt 0 ]; then
     build='false'
-    preparebuild='false'
-    imagebuild='false'
-    deploy='false'
 fi
 
 hilfe() {
@@ -68,7 +62,13 @@ while getopts "$optspec" optchar; do
                 build)
                     val="${!OPTIND}";
                     echo "Parsing option: '--${OPTARG}', value: '${val}'" >&2;
-                    build='true'
+                    build="$val"
+                    ;;
+                build=*)
+                    val=${OPTARG#*=}
+                    opt=${OPTARG%=$val}
+                    echo "Parsing option: '--${opt}', value: '${val}'" >&2
+                    build="$val"
                     ;;
                 tag)
                     val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
@@ -122,7 +122,7 @@ else
 fi
 
 echo "# B U I L D   L O C A L   A N D   D E P L O Y   T O   A R T I F A C T O R Y"
-if [ "$build" == 'true' ]; then
+if [ "$build" != 'false' ]; then
     if [ "$tagversion" != 'latest' ]; then
         # Ensure git checkout master is executed on script exit
         trap 'git checkout master' EXIT
@@ -130,7 +130,7 @@ if [ "$build" == 'true' ]; then
         git checkout "$tagversion"
     fi
     echo "Build pc local and deploy to artifactory"
-    "$scriptdir"/_build-and-deploy-to-artifactory.sh
+    "$scriptdir"/_build-and-deploy-to-artifactory.sh $build
 fi
 
 
