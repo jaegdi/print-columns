@@ -36,4 +36,4 @@ RUN go mod tidy \
  && go build -v -o dist
 
 # Set the entrypoint to the built binary
-ENTRYPOINT ["/app/dist/pc"]
+CMD ["sleep", "infinity"]
