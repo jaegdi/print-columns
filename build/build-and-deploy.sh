@@ -59,7 +59,7 @@ while getopts "$optspec" optchar; do
         -)  # Evaluate long options
             case "${OPTARG}" in
                 build)
-                    val="${!OPTIND}";
+                    val="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
                     echo "Parsing option: '--${OPTARG}', value: '${val}'" >&2;
                     build="$val"
                     ;;
@@ -93,13 +93,13 @@ while getopts "$optspec" optchar; do
             esac;;
         # Evaluate short options
         b)
-            val="${!OPTIND}";
-            echo "Parsing option: '-${optchar}'" >&2
+            val="${OPTARG#*=}";
+            echo "Parsing option: '-${optchar}', value: '${val}'" >&2
             build="$val"
             ;;
         t)
-            val="${!OPTIND}";
-            echo "Parsing option: '-${optchar}'" >&2
+            val="${OPTARG#*=}";
+            echo "Parsing option: '-${optchar}', value: '${val}'" >&2
             tagversion="$val"
             ;;
         h)
@@ -133,7 +133,7 @@ if [ "$build" != 'false' ]; then
         echo "git checkout $tagversion"
         git checkout "$tagversion"
     fi
-    echo "Build pc local and deploy to artifactory"
+    echo "Build $build local and deploy to artifactory"
     "$scriptdir"/_build-and-deploy-to-artifactory.sh $build
 
 fi

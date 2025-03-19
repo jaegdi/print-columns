@@ -14,15 +14,15 @@ RUN yum install -y \
     && yum clean all
 
 # Install Go manually
-ENV GO_VERSION=1.23.7 \
-    CGO_CFLAGS="-std=c99 -Wno-implicit-function-declaration" \
-    CGO_ENABLED=0 \
-    PATH="/usr/local/go/bin:${PATH}" \
-    GOLANGTGZ="go${GO_VERSION}.linux-amd64.tar.gz"
+ENV GO_VERSION=1.23.7
+ENV CGO_CFLAGS="-std=c99 -Wno-implicit-function-declaration"
+ENV CGO_ENABLED=0
+ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOLANGTGZ="go${GO_VERSION}.linux-amd64.tar.gz"
 
-RUN wget -q https://go.dev/dl/$GOLANGTGZ
-RUN tar -C /usr/local -xzf $GOLANGTGZ
-RUN rm $GOLANGTGZ
+RUN wget -q https://go.dev/dl/${GOLANGTGZ} \
+ && tar -C /usr/local -xzf ${GOLANGTGZ} \
+ && rm ${GOLANGTGZ}
 
 
 # Set the working directory
@@ -36,7 +36,7 @@ RUN rm -f go.mod go.sum pc pc.exe\
  && go mod init pc \
  && go mod tidy \
  && echo "######## Now building the binary ##########" \
- && if go build -v -o ./dist . ; then echo "######## Binary built successfully ##########"; fi
+ && if go build -v -o ./dist ; then echo "######## Binary built successfully ##########"; fi
 
 # Set the entrypoint to the built binary
 CMD ["sleep", "infinity"]
