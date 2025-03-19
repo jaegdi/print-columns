@@ -16,14 +16,9 @@ fi
 
 # Set defaults and evaluate commandline parameters
 CLUSTER=cid-scp0
-optspec=":bpidvhct-:"
 tagversion="$(get-git-tag.sh)"
 # per default make it all
-build='true'
-# if one or more params is given, then only this params is executed
-if [ $# -gt 0 ]; then
-    build='false'
-fi
+build='false'
 
 hilfe() {
     if [[ -n $1 ]]; then
@@ -37,8 +32,10 @@ hilfe() {
         $script [-b|--build] [-h|--help]
 
     OPTIONS
-        -b | --build
+        -b <name> | --build[=]<name>
             Enable to build the pc executable and deploy to artifactory
+        -t <tag> | --tag[=]<tag>
+            The tag version of the pc to build
         -h | --help
             Print this help message
 
@@ -46,15 +43,17 @@ hilfe() {
         $script builds and deploys the pc to the specified cluster.
 
     EXAMPLES
-        $script -b -t v1.0.0
+        $script -b name -t v1.0.0
             Build the pc with tag v1.0.0 and deploy it
-        $script -b
+        $script -b name -t latest
             Build the pc with the latest tag
-
+        $script -b name
+            Build the pc with the newest tag that is defined in git
 EOH
 }
 
 
+optspec=":vhb:t:-:"
 while getopts "$optspec" optchar; do
     case "${optchar}" in
         -)  # Evaluate long options
@@ -96,7 +95,12 @@ while getopts "$optspec" optchar; do
         b)
             val="${!OPTIND}";
             echo "Parsing option: '-${optchar}'" >&2
-            build=true
+            build="$val"
+            ;;
+        t)
+            val="${!OPTIND}";
+            echo "Parsing option: '-${optchar}'" >&2
+            tagversion="$val"
             ;;
         h)
             val="${!OPTIND}";
@@ -131,6 +135,7 @@ if [ "$build" != 'false' ]; then
     fi
     echo "Build pc local and deploy to artifactory"
     "$scriptdir"/_build-and-deploy-to-artifactory.sh $build
+
 fi
 
 
