@@ -77,6 +77,7 @@ func EvalFlags() {
 	sepPtr := flag.String("sep", " ", "InputColumnSeperator, define the character to separate the columns, when parsing in, default=' '")
 	colsepPtr := flag.String("colsep", "|", "ColumnSeperator, define the character to separate the columns, default='|'")
 	filterPtr := flag.String("filter", "", "Filterpattern, process only lines where 'filter-string' is found")
+	markPtr := flag.String("mark", "", "Regex pattern to mark output lines with color")
 	gcolnrPtr := flag.Int("gcol", 0, "GroupColumn, write a separator when the value in this column is different to the value in the previous line to group the values in this column. Number refers to the number of the output column")
 	gcolvalPtr := flag.Bool("gcolval", false, "GroupColumnValues, Do not replace values in Groupcol by '' ")
 	sortColPtr := flag.Int("sortcol", 0, "SortColumn, number of column, to sort for. Only one column ca be defined for sort.")
@@ -108,6 +109,7 @@ func EvalFlags() {
 		Sep:        string(*sepPtr),
 		Colsep:     string(*colsepPtr),
 		Filter:     string(*filterPtr),
+		Mark:       string(*markPtr),
 		Gcol:       T_ColNum(*gcolnrPtr),
 		GcolVal:    bool(*gcolvalPtr),
 		SortCol:    T_ColNum(*sortColPtr),

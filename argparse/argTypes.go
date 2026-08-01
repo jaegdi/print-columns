@@ -37,6 +37,7 @@ type T_flags struct {
 	Grouping   bool
 	MoreBlanks bool
 	verify     bool
+	Mark       string // Regex pattern for marking lines
 	Columns    T_ColNumbers
 }
 

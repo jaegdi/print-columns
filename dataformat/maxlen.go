@@ -1,7 +1,7 @@
 package pc
 
 import (
-	"unicode/utf8"
+	"github.com/mattn/go-runewidth"
 )
 
 type T_maxlenghts []int
@@ -24,7 +24,7 @@ func GetMaxLength(d T_parsedData) T_maxlenghts {
 	maxlengths := T_maxlenghts{}
 	for _, line := range d {
 		for col, val := range line {
-			length := utf8.RuneCountInString(val)
+			length := runewidth.StringWidth(val)
 			maxlengths.setMl(col, length)
 		}
 	}

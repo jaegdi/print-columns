@@ -52,6 +52,7 @@ DESCRIPTION
         -w=1                                no of blanks between colums seperator and column content, default is 1.
         -colsep='|'       ColumnSeparator   define the character to separate the columns, default='|'.
         -filter='regex'   Filter lines,     process only lines where 'string' or 'regex' matches.
+        -mark='regex'     Mark lines,       output lines matching the regex will be colored (ANSI yellow).
         -sortcol=colnum:  SortColumn        number of column, to sort for. Only one column can be defined for sort.
                                             Number refers to the number of the output column.
         -gcol=colnum:     GroupCol          write a separator when the value in this column is different

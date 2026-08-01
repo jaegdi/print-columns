@@ -11,9 +11,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"unicode/utf8"
-
 	pluralize "github.com/gertd/go-pluralize"
+	"github.com/mattn/go-runewidth"
 	"golang.org/x/exp/slices"
 )
 
@@ -148,8 +147,8 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 		val := ""
 		if pos < len(*data) {
 			val = (*data)[pos]
-			runecount := utf8.RuneCountInString(val)
-			blanklen := mxlen - runecount
+			displayWidth := runewidth.StringWidth(val)
+			blanklen := mxlen - displayWidth
 			if regexp.MustCompile(`^ *[0-9\.,]+(k|m|d|h|H|M|J|Y|Ki|Mi|Gi){0,1} *$`).MatchString(val) && !ap.CmdParams.Nn {
 				(*data)[pos] = strings.Repeat(" ", blanklen) + val
 			} else {
@@ -285,6 +284,14 @@ func (data *T_parsedData) formatDataToMaxWidth(maxlen []int) {
 // If the MoreBlanks flag is set, it replaces the placeholder character '§' with spaces.
 func (data *T_parsedData) printAsciiTab() {
 	sp := strings.Repeat(" ", ap.CmdParams.ColSepW)
+	var markRe *regexp.Regexp
+	if ap.CmdParams.Mark != "" {
+		var err error
+		markRe, err = regexp.Compile(ap.CmdParams.Mark)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Invalid -mark regex: %v\n", err)
+		}
+	}
 	for _, row := range *data {
 		var line string
 		if ap.CmdParams.Pp || ap.CmdParams.Cs {
@@ -294,6 +301,11 @@ func (data *T_parsedData) printAsciiTab() {
 		}
 		if ap.CmdParams.MoreBlanks {
 			line = strings.Replace(line, "§", " ", -1)
+		}
+		// Apply color if line matches regex
+		if markRe != nil && markRe.MatchString(line) {
+			// ANSI escape code for yellow
+			line = "\033[33m" + line + "\033[0m"
 		}
 		fmt.Println(line)
 	}
