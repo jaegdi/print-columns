@@ -3,27 +3,61 @@ package main
 import (
 	ap "pc/argparse"
 	df "pc/dataformat"
-	ld "pc/loaddata"
 	"reflect"
 	"testing"
 )
 
-var filename = `/home/jaegdi/devel/go/pc-go/test/data/data.txt`
-
-// Test GetLineString, line with fixed length columns seperated by two or more blanks
+// Test LineParse with data from file
 func TestParseDataFromFileLine1(t *testing.T) {
+	ap.CmdParams.Sep = " "
+	ap.CmdParams.MoreBlanks = false
+
+	data, err := readTestDataFile("data.txt")
+	if err != nil {
+		t.Fatalf("Failed to read test data: %v", err)
+	}
+
+	// Line 1: "A B C D E F" - single space separated
 	want := df.T_dataline{`A`, `B`, `C`, `D`, `E`, `F`}
-	erg := df.LineParse(ld.GetData(filename)[0], ' ')
+	erg := df.LineParse(data[0], ' ')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`GetData("%s") = %q, want match for %#q, nil`, ap.CmdParams.Filename, erg, want)
+		t.Fatalf(`LineParse() = %q, want %q`, erg, want)
 	}
 }
 
 func TestParseDataFromFileLine2(t *testing.T) {
-	want := df.T_dataline{`F`, `B`, `C`, `A_B`, `E`, `F`}
-	erg := df.LineParse(ld.GetData(filename)[1], ' ')
+	ap.CmdParams.Sep = " "
+	ap.CmdParams.MoreBlanks = false
+
+	data, err := readTestDataFile("data.txt")
+	if err != nil {
+		t.Fatalf("Failed to read test data: %v", err)
+	}
+
+	// Line 2: "F  B  C  A B  E  F" - with MoreBlanks=false, all spaces are separators
+	// Empty strings between double spaces are filtered out
+	want := df.T_dataline{`F`, `B`, `C`, `A`, `B`, `E`, `F`}
+	erg := df.LineParse(data[1], ' ')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`GetData("%s") = %q, want match for %#q, nil`, ap.CmdParams.Filename, erg, want)
+		t.Fatalf(`LineParse() = %q, want %q`, erg, want)
+	}
+}
+
+func TestParseDataFromFileLine2WithMoreBlanks(t *testing.T) {
+	ap.CmdParams.Sep = " "
+	ap.CmdParams.MoreBlanks = true
+
+	data, err := readTestDataFile("data.txt")
+	if err != nil {
+		t.Fatalf("Failed to read test data: %v", err)
+	}
+
+	// Line 2: "F  B  C  A B  E  F" - with MoreBlanks=true, double spaces are separators
+	// "A B" stays together as one field
+	want := df.T_dataline{`F`, `B`, `C`, `A B`, `E`, `F`}
+	erg := df.LineParse(data[1], ' ')
+	if !reflect.DeepEqual(erg, want) {
+		t.Fatalf(`LineParse() = %q, want %q`, erg, want)
 	}
 }
 

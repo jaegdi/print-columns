@@ -4,80 +4,105 @@ import (
 	ap "pc/argparse"
 	df "pc/dataformat"
 	"reflect"
-	"regexp"
 	"testing"
 )
 
-// Test GetLineString, line with fixed length columns seperated by two or more blanks
+// Reset params before each test
+func resetParseParams() {
+	ap.CmdParams.MoreBlanks = false
+	ap.CmdParams.Sep = " "
+}
+
+// Test GetLineString, line with fixed length columns separated by two or more blanks
 func TestGetLineStringFixedColumnsByBlanksOneCombinedTag(t *testing.T) {
+	resetParseParams()
+	ap.CmdParams.MoreBlanks = true
+
 	line := "NAME       NAMESPACE                  DOCKER REF            ISTAG                 UPDATED"
-	want := regexp.MustCompile(`NAME NAMESPACE DOCKER_REF ISTAG UPDATED`)
-	msg := df.GetLineSlice(line)
-	if !want.MatchString(msg) {
-		t.Fatalf(`Hello("%s") = %q, want match for %#q, nil`, line, msg, want)
+	// With MoreBlanks=true, "DOCKER REF" should become one field because there's only one space between them
+	// but multiple spaces separate the columns
+	want := df.T_dataline{`NAME`, `NAMESPACE`, `DOCKER REF`, `ISTAG`, `UPDATED`}
+	erg := df.LineParse(line, ' ')
+	if !reflect.DeepEqual(erg, want) {
+		t.Fatalf(`LineParse("%s") = %q, want %q`, line, erg, want)
 	}
 }
 
 func TestParseHeadlineFixedColumnsByBlanksMoreCombinedTags(t *testing.T) {
+	resetParseParams()
 	ap.CmdParams.MoreBlanks = true
+
 	line := "NAME SPEC                 DOCKER REF                 UPDATED VAL"
-	want := df.T_dataline{`NAME_SPEC`, `DOCKER_REF`, `UPDATED_VAL`}
+	// With MoreBlanks, single spaces are kept together, multiple spaces are separators
+	want := df.T_dataline{`NAME SPEC`, `DOCKER REF`, `UPDATED VAL`}
 	erg := df.LineParse(line, ' ')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`Hello("%s") = %q, want match for %#q, nil`, line, erg, want)
+		t.Fatalf(`LineParse("%s") = %q, want %q`, line, erg, want)
 	}
 }
 
 func TestParseDoubleQuoted(t *testing.T) {
-	line := "NAME \"DOCKER REF\" UPDATED"
+	resetParseParams()
+
+	line := `NAME "DOCKER REF" UPDATED`
 	want := df.T_dataline{`NAME`, `"DOCKER REF"`, `UPDATED`}
 	erg := df.LineParse(line, ' ')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`LineParse("%s",'%v') = %v, want match for %v`, line, ' ', erg, want)
+		t.Fatalf(`LineParse("%s") = %v, want %v`, line, erg, want)
 	}
 }
 
 func TestParseSingleQuoted(t *testing.T) {
+	resetParseParams()
+
 	line := "NAME 'DOCKER REF' UPDATED"
 	want := df.T_dataline{`NAME`, `'DOCKER REF'`, `UPDATED`}
 	erg := df.LineParse(line, ' ')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`LineParse("%s",'%v') = %v, want match for %v`, line, ' ', erg, want)
+		t.Fatalf(`LineParse("%s") = %v, want %v`, line, erg, want)
 	}
 }
 
 func TestParseVariableLength(t *testing.T) {
+	resetParseParams()
+
 	line := "NAME DOCKER REF UPDATED"
 	want := df.T_dataline{`NAME`, `DOCKER`, `REF`, `UPDATED`}
 	erg := df.LineParse(line, ' ')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`LineParse("%s",'%v') = %v, want match for %v`, line, ' ', erg, want)
+		t.Fatalf(`LineParse("%s") = %v, want %v`, line, erg, want)
 	}
 }
 
 func TestParseComma(t *testing.T) {
+	resetParseParams()
+
 	line := "NAME,DOCKER,REF,UPDATED"
 	want := df.T_dataline{`NAME`, `DOCKER`, `REF`, `UPDATED`}
 	erg := df.LineParse(line, ',')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`LineParse("%s",'%v') = %v, want match for %v`, line, ' ', erg, want)
+		t.Fatalf(`LineParse("%s") = %v, want %v`, line, erg, want)
 	}
 }
 
 func TestParseCommaQuoted(t *testing.T) {
+	resetParseParams()
+
 	line := `NAME,"DOCKER,REF",UPDATED`
 	want := df.T_dataline{`NAME`, `"DOCKER,REF"`, `UPDATED`}
 	erg := df.LineParse(line, ',')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`LineParse("%s",'%v') = %v, want match for %v`, line, ' ', erg, want)
+		t.Fatalf(`LineParse("%s") = %v, want %v`, line, erg, want)
 	}
 }
 
 func TestParseTilde(t *testing.T) {
+	resetParseParams()
+
 	line := "NAME~DOCKER~REF~UPDATED"
 	want := df.T_dataline{`NAME`, `DOCKER`, `REF`, `UPDATED`}
 	erg := df.LineParse(line, '~')
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`LineParse("%s",'%v') = %v, want match for %v`, line, ' ', erg, want)
+		t.Fatalf(`LineParse("%s") = %v, want %v`, line, erg, want)
 	}
 }

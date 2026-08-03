@@ -13,7 +13,7 @@ SYNOPSYS
     pc [options]  [column-numbers]
 
     options:        [-file=input-filename] [-header='col1-header col2-header coln-header'] [-colsep='|'] [-filter='string]
-                    [-csv] [-json] [-jtc] [-ts] [-cs] [-rh] [-pp] [-num] [-h,-help] [-man]
+                    [-csv] [-json] [-jtc] [-ts] [-cs] [-rh] [-pp] [-num] [-version] [-h,-help] [-man]
     column-numbers: [ 1 2 n:m ], a range of columns can be given with [n:m]
 
     !! All the options must be set before the column-numbers!
@@ -75,6 +75,7 @@ DESCRIPTION
         -json             JSON              write output in JSON format.
         -jtc              TitelColumn       relevant for JSON with defined headers, use first column as main-key
                                             and put all other columns as sub-key
+        -version          Version           print version and exit.
         -help             Help              print help and exit.
         -man              Manual            print help and manual, then exit.
         -v                Verify            print parameter verirfy info.

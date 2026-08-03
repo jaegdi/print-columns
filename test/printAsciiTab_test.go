@@ -68,13 +68,13 @@ func TestPrintAsciiTabMultilineCell(t *testing.T) {
 	lines := strings.Split(strings.TrimSuffix(output, "\n"), "\n")
 
 	// With -pp enabled, we expect:
-	// Line 0: separator  | ----- | ----------- | ----- |
-	// Line 1: header     | Name  | Description | Value |
-	// Line 2: separator  | ----- | ----------- | ----- |
+	// Line 0: separator         | ----- | ----------- | ----- |
+	// Line 1: header            | Name  | Description | Value |
+	// Line 2: separator         | ----- | ----------- | ----- |
 	// Line 3: Alice row line 1: | Alice | Hello       |   100 |
 	// Line 4: Alice row line 2: |       | World       |       |
-	// Line 5: Bob row:   | Bob   | Simple      |   200 |
-	// Line 6: separator  | ----- | ----------- | ----- |
+	// Line 5: Bob row:          | Bob   | Simple      |   200 |
+	// Line 6: separator         | ----- | ----------- | ----- |
 
 	// Find the Alice row - it should span 2 visual lines
 	aliceLineIdx := -1

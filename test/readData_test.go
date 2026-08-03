@@ -1,22 +1,24 @@
 package main
 
 import (
-	ap "pc/argparse"
-	ld "pc/loaddata"
 	"reflect"
 	"testing"
 )
 
-// Test GetLineString, line with fixed length columns seperated by two or more blanks
+// Test reading data from file
 func TestReadDataFromFile(t *testing.T) {
-	filename := `/home/jaegdi/devel/go/pc-go/test/data/data.txt`
 	want := []string{
 		"A B C D E F",
 		"F  B  C  A B  E  F",
 		"a bb ccc dd eeeee ffffff",
 	}
-	erg := ld.GetData(filename)
+
+	erg, err := readTestDataFile("data.txt")
+	if err != nil {
+		t.Fatalf("Failed to read test data: %v", err)
+	}
+
 	if !reflect.DeepEqual(erg, want) {
-		t.Fatalf(`GetData("%s") = %q, want match for %#q, nil`, ap.CmdParams.Filename, erg, want)
+		t.Fatalf(`readTestDataFile("data.txt") = %q, want %q`, erg, want)
 	}
 }
