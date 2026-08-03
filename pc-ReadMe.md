@@ -67,6 +67,7 @@ DESCRIPTION
         -json             JSON              write output in JSON format.
         -jtc              TitelColumn       relevant for JSON with defined headers, use first column as main-key
                                             and put all other columns as sub-key
+        -version          Version           print version and exit.
         -help             Help              print help and exit.
         -man              Manual            print help and manual, then exit.
         -v                Verify            print parameter verirfy info.
@@ -252,5 +253,3 @@ EXAMPLES
         | host-mst-v01.my-domain.de | Ready  | ''     | 192.68.42.20 | <none>      | 3.10.0-1160.42.2.el7.x86_64 |
         | host-mst-v02.my-domain.de | Ready  | ''     | 192.68.42.25 | <none>      | 3.10.0-1160.42.2.el7.x86_64 |
         | ------------------------- | ------ | ------ | ------------ | ----------- | --------------------------- |
-
-        

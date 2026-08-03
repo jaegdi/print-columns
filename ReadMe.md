@@ -67,6 +67,7 @@ DESCRIPTION
         -json             JSON              write output in JSON format.
         -jtc              TitelColumn       relevant for JSON with defined headers, use first column as main-key
                                             and put all other columns as sub-key
+        -version          Version           print version and exit.
         -help             Help              print help and exit.
         -man              Manual            print help and manual, then exit.
         -v                Verify            print parameter verirfy info.
@@ -86,4 +87,3 @@ AUTHOR
 COPYRIGHT
     Copyright © 2020 Free Software Foundation, Inc.  License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
     This is free software: you are free to change and redistribute it.  There is NO WARRANTY, to the extent permitted by law.
-    
