@@ -34,7 +34,11 @@ DESCRIPTION
   
     Without column-numbers parameters 'pc' print all columns from input in formated form
 
+INSTALLATION
 
+    Copy binary from release page or clone the repository and build it with 'go build' or
+    ./build.sh script in the cloned repository. Put the binary in a dir of your PATH.
+    
 OPTIONS
 
     -file=filename                      read the text from this file,
