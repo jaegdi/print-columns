@@ -7,14 +7,15 @@ SYNOPSYS
 
     options:        [-file=input-filename] [-header='col1-header col2-header coln-header'] [-colsep='|'] [-filter='string]
                     [-csv] [-json] [-jtc] [-ts] [-cs] [-rh] [-pp] [-num] [-h,-help] [-man]
-    column-numbers: [ 1 2 n:m ], a range of columns can be given with [n:m]
+                    
+    col-num params: [ 1 2 n:m ], a range of columns can be given with [n:m]
 
     !! All the options must be set before the column-numbers!
 
 DESCRIPTION
-    Text that is in unformatted columns can be formatted and filtered with this command.
+    Text that is in unformatted columns (delimited by blanks or a char) can be formatted and filtered with this command.
 
-    pc - formats text columns from stdin or file and print them as a ASCII table or CSV or JSON.
+    pc - formats text columns from stdin or file and print them as a pretty ASCII table or CSV or JSON.
          With the optional parameters the look and content of the output can be modified.
          The columns for output can be selected by single numbers seperated by space or one or 
          ore ranges seperated by colon. 
@@ -26,8 +27,8 @@ DESCRIPTION
 
     Without column-numbers parameters 'pc' print all columns from input in formated form
 
-    The parameters:
 
+OPTIONS
         -file=filename                      read the text from this file,
                                             if there is also data from STDIN, this is added together
 
@@ -74,14 +75,14 @@ DESCRIPTION
         -man              Manual            print help and manual, then exit.
         -v                Verify            print parameter verirfy info.
 
+PARAMETERS
+    The parameters for the columns to print are defined as follows:
+
         1 2 m n      ColumnNumbers,
         m:n          ColumnNumber-ranges    The number or ranges of the columns from the incoming text,
                                             that should printed out. To rearrange the columns
                                             the columns can given in the wanted order.
-                                            This parameters must be defined after all other parameters.
-
-        -h -help          Help,             print help and exit
-        -man              Manual,           print help and manual, then exit
+                                            This parameters must be defined at last after all options.
 
 AUTHOR
     written by Dirk Jäger (dirk.jaeger.dj@gmail.com)
