@@ -1,6 +1,9 @@
 
 NAME
-  pc - PrintColumns - tidy and filter character delimited tabular input and generate formated pretty printed table output, or csv, json, yaml
+
+    pc - PrintColumns - 
+        tidy and filter character delimited tabular input and generate formated 
+        pretty printed table output, or csv, json, yaml
 
 SYNOPSYS
 
