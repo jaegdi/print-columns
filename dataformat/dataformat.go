@@ -11,9 +11,9 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 
 	pluralize "github.com/gertd/go-pluralize"
+	"github.com/mattn/go-runewidth"
 	"golang.org/x/exp/slices"
 )
 
@@ -148,16 +148,23 @@ func (data *T_dataline) generateLine(maxlen T_maxlenghts) {
 		val := ""
 		if pos < len(*data) {
 			val = (*data)[pos]
-			runecount := utf8.RuneCountInString(val)
-			blanklen := mxlen - runecount
-			if regexp.MustCompile(`^ *[0-9\.,]+(k|m|d|h|H|M|J|Y|Ki|Mi|Gi){0,1} *$`).MatchString(val) && !ap.CmdParams.Nn {
-				(*data)[pos] = strings.Repeat(" ", blanklen) + val
-			} else {
-				(*data)[pos] = val + strings.Repeat(" ", blanklen)
-			}
 		} else {
 			*data = append(*data, strings.Repeat(" ", mxlen))
+			continue
 		}
+
+		lines := strings.Split(val, "\n")
+		var paddedLines []string
+		for _, l := range lines {
+			displayWidth := runewidth.StringWidth(l)
+			blanklen := mxlen - displayWidth
+			if regexp.MustCompile(`^ *[0-9\.,]+(k|m|d|h|H|M|J|Y|Ki|Mi|Gi){0,1} *$`).MatchString(l) && !ap.CmdParams.Nn {
+				paddedLines = append(paddedLines, strings.Repeat(" ", blanklen)+l)
+			} else {
+				paddedLines = append(paddedLines, l+strings.Repeat(" ", blanklen))
+			}
+		}
+		(*data)[pos] = strings.Join(paddedLines, "\n")
 	}
 }
 
@@ -281,21 +288,62 @@ func (data *T_parsedData) formatDataToMaxWidth(maxlen []int) {
 
 // printAsciiTab prints the parsed data as an ASCII table.
 // It formats each row of the data according to the specified column separator and column width.
+// If a field contains linefeeds, the cell is printed across multiple visual lines and
+// all sibling cells are padded with blanks for those extra lines.
 // If the PrettyPrint (Pp) or ColumnSeparator (Cs) flags are set, it adds the column separator between columns.
 // If the MoreBlanks flag is set, it replaces the placeholder character '§' with spaces.
-func (data *T_parsedData) printAsciiTab() {
+func (data *T_parsedData) printAsciiTab(maxlen T_maxlenghts) {
 	sp := strings.Repeat(" ", ap.CmdParams.ColSepW)
+	numCols := len(maxlen)
+	var markRe *regexp.Regexp
+	if ap.CmdParams.Mark != "" {
+		var err error
+		markRe, err = regexp.Compile(ap.CmdParams.Mark)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Invalid -mark regex: %v\n", err)
+		}
+	}
 	for _, row := range *data {
-		var line string
-		if ap.CmdParams.Pp || ap.CmdParams.Cs {
-			line = ap.CmdParams.Colsep + sp + strings.Join(row, sp+ap.CmdParams.Colsep+sp) + sp + ap.CmdParams.Colsep
-		} else {
-			line = strings.Join(row, sp)
+		// Split each field into sub-lines
+		subLines := make([][]string, len(row))
+		maxSubLines := 0
+		for i, field := range row {
+			subLines[i] = strings.Split(field, "\n")
+			if len(subLines[i]) > maxSubLines {
+				maxSubLines = len(subLines[i])
+			}
 		}
-		if ap.CmdParams.MoreBlanks {
-			line = strings.Replace(line, "§", " ", -1)
+		if maxSubLines == 0 {
+			maxSubLines = 1
 		}
-		fmt.Println(line)
+
+		// Print one visual line at a time
+		for lineIdx := 0; lineIdx < maxSubLines; lineIdx++ {
+			var parts []string
+			for col := 0; col < numCols; col++ {
+				if col < len(subLines) && lineIdx < len(subLines[col]) {
+					parts = append(parts, subLines[col][lineIdx])
+				} else {
+					parts = append(parts, strings.Repeat(" ", maxlen[col]))
+				}
+			}
+
+			var line string
+			if ap.CmdParams.Pp || ap.CmdParams.Cs {
+				line = ap.CmdParams.Colsep + sp + strings.Join(parts, sp+ap.CmdParams.Colsep+sp) + sp + ap.CmdParams.Colsep
+			} else {
+				line = strings.Join(parts, sp)
+			}
+			if ap.CmdParams.MoreBlanks {
+				line = strings.Replace(line, "§", " ", -1)
+			}
+			// Apply color if line matches regex
+			if markRe != nil && markRe.MatchString(line) {
+				// ANSI escape code for yellow
+				line = "\033[33m" + line + "\033[0m"
+			}
+			fmt.Println(line)
+		}
 	}
 }
 
@@ -365,6 +413,6 @@ func Format(data T_parsedData) {
 		if !ap.CmdParams.Nf {
 			data.formatDataToMaxWidth(maxlen)
 		}
-		data.printAsciiTab()
+		data.printAsciiTab(maxlen)
 	}
 }

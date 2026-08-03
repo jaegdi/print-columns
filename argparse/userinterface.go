@@ -77,6 +77,7 @@ func EvalFlags() {
 	sepPtr := flag.String("sep", " ", "InputColumnSeperator, define the character to separate the columns, when parsing in, default=' '")
 	colsepPtr := flag.String("colsep", "|", "ColumnSeperator, define the character to separate the columns, default='|'")
 	filterPtr := flag.String("filter", "", "Filterpattern, process only lines where 'filter-string' is found")
+	markPtr := flag.String("mark", "", "Regex pattern to mark output lines with color")
 	gcolnrPtr := flag.Int("gcol", 0, "GroupColumn, write a separator when the value in this column is different to the value in the previous line to group the values in this column. Number refers to the number of the output column")
 	gcolvalPtr := flag.Bool("gcolval", false, "GroupColumnValues, Do not replace values in Groupcol by '' ")
 	sortColPtr := flag.Int("sortcol", 0, "SortColumn, number of column, to sort for. Only one column ca be defined for sort.")
@@ -97,6 +98,7 @@ func EvalFlags() {
 	jtcPtr := flag.Bool("jtc", false, "JSON, use first column as key")
 	hlpPtr := flag.Bool("help", false, "Help, print help and exit")
 	manPtr := flag.Bool("man", false, "Manual, print help and manual, then exit")
+	verPtr := flag.Bool("version", false, "Version, print version and exit")
 	verifyPtr := flag.Bool("v", false, "Verify, print parameter verirfy info")
 
 	flag.Parse()
@@ -108,6 +110,7 @@ func EvalFlags() {
 		Sep:        string(*sepPtr),
 		Colsep:     string(*colsepPtr),
 		Filter:     string(*filterPtr),
+		Mark:       string(*markPtr),
 		Gcol:       T_ColNum(*gcolnrPtr),
 		GcolVal:    bool(*gcolvalPtr),
 		SortCol:    T_ColNum(*sortColPtr),
@@ -126,6 +129,7 @@ func EvalFlags() {
 		Jtc:        bool(*jtcPtr),
 		Help:       bool(*hlpPtr),
 		Manual:     bool(*manPtr),
+		Version:    bool(*verPtr),
 		MoreBlanks: bool(*mbPtr),
 		verify:     bool(*verifyPtr),
 		Columns:    getArgsColNumbers(),
@@ -134,6 +138,11 @@ func EvalFlags() {
 	CmdParams = flags
 
 	fix_params()
+
+	if flags.Version {
+		fmt.Printf("pc version %s\n", AppVersion)
+		os.Exit(0)
+	}
 
 	if flags.Manual {
 		cmdManpage()

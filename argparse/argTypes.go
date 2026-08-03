@@ -36,9 +36,14 @@ type T_flags struct {
 	Manual     bool
 	Grouping   bool
 	MoreBlanks bool
+	Version    bool
 	verify     bool
+	Mark       string // Regex pattern for marking lines
 	Columns    T_ColNumbers
 }
+
+// AppVersion holds the application version, set from main package
+var AppVersion = "dev"
 
 func (t T_flags) Print() {
 	v := reflect.ValueOf(t)
