@@ -1,0 +1,15 @@
+ThinPoolDataUsageAtThresholdNearFull openshift-storage vg-manager-metrics-service warning 2026-07-20T12:00:45.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 75 % on node gf02socs546p.corp.int. Free up some space or expand the thin pool."
+Watchdog openshift-monitoring --- none 2026-07-20T12:00:49.345442749Z "An alert that should always be firing to certify that Alertmanager is working properly."
+AlertmanagerReceiversNotConfigured openshift-monitoring --- warning 2026-07-20T12:01:01.898312886Z "Receivers (notification integrations) are not configured on Alertmanager"
+ThinPoolDataUsageAtThresholdNearFull openshift-storage vg-manager-metrics-service warning 2026-07-20T12:01:15.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 75 % on node gf01socs542p.corp.int. Free up some space or expand the thin pool."
+ClusterLogForwarderDeprecations openshift-logging collector info 2026-07-20T12:01:18.436721166Z "The Cluster Logging Operator version 6.2.11 includes deprecations to some features of ClusterLogForwarder which
+will be removed in a future release. Please see the release notes for details:
+https://docs.redhat.com/en/documentation/red_hat_openshift_logging/6.2/html/release_notes"
+ThinPoolDataUsageAtThresholdNearFull openshift-storage vg-manager-metrics-service warning 2026-07-20T12:01:45.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 75 % on node gf02socs542p.corp.int. Free up some space or expand the thin pool."
+ThinPoolDataUsageAtThresholdCritical openshift-storage vg-manager-metrics-service critical 2026-07-20T12:27:45.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 85 % on node gf01socs545p.corp.int. Free up some space or expand the thin pool immediately."
+VolumeGroupUsageAtThresholdCritical openshift-storage vg-manager-metrics-service critical 2026-07-20T12:27:55.762539583Z "VolumeGroup vg1 utilization has crossed 85 % on node gf01socs545p.corp.int. Free up some space or expand the VolumeGroup immediately."
+ThinPoolDataUsageAtThresholdNearFull openshift-storage vg-manager-metrics-service warning 2026-07-20T12:52:45.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 75 % on node gf02socs545p.corp.int. Free up some space or expand the thin pool."
+ThinPoolDataUsageAtThresholdNearFull openshift-storage vg-manager-metrics-service warning 2026-07-20T13:12:15.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 75 % on node gf02socs540p.corp.int. Free up some space or expand the thin pool."
+ThinPoolDataUsageAtThresholdNearFull openshift-storage vg-manager-metrics-service warning 2026-07-20T13:18:15.346727884Z "Thin Pool data utilization in the VolumeGroup vg1 has crossed 75 % on node gf01socs547p.corp.int. Free up some space or expand the thin pool."
+ClusterNotUpgradeable openshift-cluster-version --- info 2026-07-28T16:42:30.865874291Z "One or more cluster operators have been blocking minor version cluster upgrades for at least an hour."
+InsightsDisabled openshift-insights --- info 2026-07-28T16:42:46.478714569Z "Insights operator is disabled."

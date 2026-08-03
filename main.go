@@ -7,11 +7,17 @@ import (
 	ld "pc/loaddata"
 )
 
+// Version is set at build time via -ldflags
+var Version = "dev"
+
 func init() {
 	// ap.EvalFlags()
 }
 
 func main() {
+	// Set the version in argparse package
+	ap.AppVersion = Version
+
 	ap.CmdParams.Sep = " "
 	ap.EvalFlags()
 	// Load data from file and/or STDIN

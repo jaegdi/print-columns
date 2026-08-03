@@ -98,6 +98,7 @@ func EvalFlags() {
 	jtcPtr := flag.Bool("jtc", false, "JSON, use first column as key")
 	hlpPtr := flag.Bool("help", false, "Help, print help and exit")
 	manPtr := flag.Bool("man", false, "Manual, print help and manual, then exit")
+	verPtr := flag.Bool("version", false, "Version, print version and exit")
 	verifyPtr := flag.Bool("v", false, "Verify, print parameter verirfy info")
 
 	flag.Parse()
@@ -128,6 +129,7 @@ func EvalFlags() {
 		Jtc:        bool(*jtcPtr),
 		Help:       bool(*hlpPtr),
 		Manual:     bool(*manPtr),
+		Version:    bool(*verPtr),
 		MoreBlanks: bool(*mbPtr),
 		verify:     bool(*verifyPtr),
 		Columns:    getArgsColNumbers(),
@@ -136,6 +138,11 @@ func EvalFlags() {
 	CmdParams = flags
 
 	fix_params()
+
+	if flags.Version {
+		fmt.Printf("pc version %s\n", AppVersion)
+		os.Exit(0)
+	}
 
 	if flags.Manual {
 		cmdManpage()

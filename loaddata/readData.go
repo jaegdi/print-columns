@@ -5,9 +5,55 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	ap "pc/argparse"
 )
+
+// MergeQuotedLines takes raw lines and merges lines that are part of a quoted field
+// spanning multiple lines. A line is considered incomplete if it has an odd number
+// of unescaped double quotes.
+func MergeQuotedLines(lines []string) []string {
+	result := []string{}
+	var pending strings.Builder
+	inQuote := false
+
+	for _, line := range lines {
+		if inQuote {
+			// Continue building the multiline field
+			pending.WriteString("\n")
+			pending.WriteString(line)
+		} else {
+			pending.WriteString(line)
+		}
+
+		// Count unescaped quotes to determine if we're inside a quoted field
+		quoteCount := 0
+		prevChar := rune(0)
+		for _, ch := range pending.String() {
+			if ch == '"' && prevChar != '\\' {
+				quoteCount++
+			}
+			prevChar = ch
+		}
+
+		// Odd number of quotes means we're still inside a quoted field
+		inQuote = (quoteCount % 2) != 0
+
+		if !inQuote {
+			// Line is complete, add to result
+			result = append(result, pending.String())
+			pending.Reset()
+		}
+	}
+
+	// Handle any remaining incomplete line
+	if pending.Len() > 0 {
+		result = append(result, pending.String())
+	}
+
+	return result
+}
 
 // get StdinData read data from STDIN
 func getStdinData() []string {
@@ -22,7 +68,7 @@ func getStdinData() []string {
 			log.Println(err)
 		}
 	}
-	return data
+	return MergeQuotedLines(data)
 }
 
 // getFileData reads data from a file and returns it as a slice of strings.
@@ -43,7 +89,7 @@ func getFileData(fname string) []string {
 	if err := scanner.Err(); err != nil {
 		log.Fatal("Read File:"+fname, err)
 	}
-	return data
+	return MergeQuotedLines(data)
 }
 
 // GetData reads data from a file and/or stdin, depending on the provided parameters.
