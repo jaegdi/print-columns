@@ -1,6 +1,6 @@
 
 NAME
-    pc - PrintColumns - tidy and filter input and generate formated output
+    pc - PrintColumns - tidy and filter character delimited tabular input and generate formated pretty printed table output, or csv, json, yaml
 
 SYNOPSYS
     pc [options]  [column-numbers]
@@ -16,10 +16,12 @@ DESCRIPTION
 
     pc - formats text columns from stdin or file and print them as a ASCII table or CSV or JSON.
          With the optional parameters the look and content of the output can be modified.
-         The columns for output can be selected by single numbers seperated by space or one or more ranges seperated by colon.
+         The columns for output can be selected by single numbers seperated by space or one or 
+         ore ranges seperated by colon. 
          The input should have the same number of columns in each line.
          The formated result is printed to stdout.
-
+         Optional a headerline can be defined, if the input has no headerline.
+         
          All named parameters must be defined before the column numbers.
 
     Without column-numbers parameters 'pc' print all columns from input in formated form
