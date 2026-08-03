@@ -3,6 +3,7 @@ NAME
   pc - PrintColumns - tidy and filter character delimited tabular input and generate formated pretty printed table output, or csv, json, yaml
 
 SYNOPSYS
+
     pc [options]  [column-numbers]
   
     options:        [-file=input-filename] [-header='col1-header col2-header coln-header'] [-colsep='|'] [-filter='string]
@@ -13,6 +14,7 @@ SYNOPSYS
     !! All the options must be set before the column-numbers!
 
 DESCRIPTION
+
     Text that is in unformatted columns (delimited by blanks or a char) can 
     be formatted and filtered with this command.
   
@@ -31,6 +33,7 @@ DESCRIPTION
 
 
 OPTIONS
+
     -file=filename                      read the text from this file,
                                         if there is also data from STDIN, this is added together
   
@@ -78,6 +81,7 @@ OPTIONS
     -v                Verify            print parameter verirfy info.
 
 PARAMETERS
+
     The parameters for the columns to print are defined as follows:
   
     1 2 m n      ColumnNumbers,
@@ -87,9 +91,11 @@ PARAMETERS
                                         This parameters must be defined at last after all options.
 
 AUTHOR
+
     written by Dirk Jäger (dirk.jaeger.dj@gmail.com)
 
 COPYRIGHT
+
     Copyright © 2020 Free Software Foundation, Inc.  License GPLv3+: GNU GPL version 3 or 
     later <https://gnu.org/licenses/gpl.html>. This is free software: you are free to change 
     and redistribute it. There is NO WARRANTY, to the extent permitted by law.
